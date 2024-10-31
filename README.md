@@ -2,7 +2,7 @@
 
 #### A sidebar Chrome extension that enhances Codeforces, making it a more productive platform for competitive programmers.
 
-[![Chrome Web Store](https://i.imgur.com/iswHnpJ.png)](chrome://extensions/)
+[![Chrome Web Store](https://i.imgur.com/iswHnpJ.png)](https://chromewebstore.google.com/detail/codeforces-lite/hgcgfmgjkfjmhoebifgmbfipinkkjgco)
 
 ---
 
