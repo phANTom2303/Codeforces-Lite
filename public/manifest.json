@@ -30,7 +30,8 @@
                 "assets/scripts/content.js",
                 "assets/scripts/changeUIFunctions/loginPageChanges.js",
                 "assets/scripts/changeUIFunctions/problemSetPageChanges.js",
-                "assets/scripts/darkModeFunctions/darkMode.js"
+                "assets/scripts/darkModeFunctions/darkMode.js",
+                "assets/scripts/extractTestcases/extractTestcases.js"
             ],
             "run_at": "document_start"
         }
