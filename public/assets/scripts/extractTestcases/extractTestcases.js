@@ -1,22 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const inputElements = document.querySelectorAll(".input pre");
-    const outputElements = document.querySelectorAll(".output pre");
-
-    if (inputElements.length !== outputElements.length) {
-        console.error("Mismatch between input and output elements");
-        return;
-    }
-
+    const sampleTests = document.querySelectorAll(".sample-test");
     const testCases = [];
+    let caseNumber = 1;
 
-    inputElements.forEach((inputElement, index) => {
-        const inputValue = inputElement.innerText.trim();
-        const outputValue = outputElements[index].innerText.trim();
+    sampleTests.forEach((sampleTestDiv) => {
+        const inputs = sampleTestDiv.querySelectorAll(".input pre");
+        const outputs = sampleTestDiv.querySelectorAll(".output pre");
 
-        testCases.push({
-            Testcase: index + 1,
-            Input: inputValue,
-            ExpectedOutput: outputValue,
+        if (inputs.length !== outputs.length) {
+            console.error("Mismatch between input and output elements.");
+            return;
+        }
+
+        inputs.forEach((inputElement, index) => {
+            const inputValue = inputElement.innerText.trim();
+            const outputValue = outputs[index].innerText.trim();
+
+            testCases.push({
+                Testcase: caseNumber++,
+                Input: inputValue,
+                ExpectedOutput: outputValue,
+            });
         });
     });
 
