@@ -1,9 +1,22 @@
-import {javascript} from "@codemirror/lang-javascript";
-import {python} from "@codemirror/lang-python";
-import {java} from "@codemirror/lang-java";
-import {cpp} from "@codemirror/lang-cpp";
-import {CodeEntry} from "../types/types";
-import {Queue} from "./Queue";
+import { javascript } from "@codemirror/lang-javascript";
+import { python } from "@codemirror/lang-python";
+import { java } from "@codemirror/lang-java";
+import { cpp } from "@codemirror/lang-cpp";
+import { CodeEntry, TestCase } from "../types/types";
+import { Queue } from "./Queue";
+
+// In-memory storage for Map and Queue
+let testCaseMap: Map<string, TestCase[]> = new Map<string, TestCase[]>();
+let testCaseQueue: Queue<string> = new Queue<string>();
+
+export const getTestCaseMap = (): Map<string, TestCase[]> => {
+    return testCaseMap;
+};
+
+export const getTestCaseQueue = (): Queue<string> => {
+    return testCaseQueue;
+};
+
 
 export const getCodeMap = (): Map<string, CodeEntry> => {
     const storedCodeMap = localStorage.getItem("codeMap");
@@ -35,7 +48,7 @@ export const getValueFromLanguage = (language: string) => {
 export const getLanguageExtension = (language: string) => {
     switch (language) {
         case "javascript":
-            return javascript({jsx: true});
+            return javascript({ jsx: true });
         case "python":
             return python();
         case "java":

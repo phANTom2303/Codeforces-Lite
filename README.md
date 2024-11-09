@@ -17,21 +17,29 @@
 
 # Features
 
-## 1. Built-in Code Editor with Code Save capabilities
+## 1. Advanced Code Editor with Execution & Storage Capabilities
 
 ![Code Editor](/public/assets/images/preview2.png)
 
-#### With Codeforces Lite, you can now write, time, and submit code directly from the problem page. No need to switch tabs or upload files manually.
+#### Write, test, and submit code directly from the problem page with our feature-rich editor. No more switching tabs or manual file uploads.
 
 Key features include:
-- Default language selector for easy switching between programming languages.
-- Adjustable font size for a customized coding experience.
-- Built-in timer for practicing timed coding problems.
-- Options to reset your code and automatic tab indentation.
+- Default language selector supporting multiple languages (C++, Python, Java, JavaScript, Kotlin)
+- Built-in code execution system with real-time results
+  - Test against sample cases instantly
+  - View execution time and memory usage
+  - Custom test case input support
+  - Detailed compilation and runtime error messages
+- Adjustable font size and automatic tab indentation
+- Built-in timer for practice sessions
+- Smart code storage system
+  - Local save of submitted codes
+  - Automatic retrieval when revisiting problems
+  - Efficient storage management handling 1000+ files (200+ lines each)
+  - Automatic cleanup using HashMap and Queue for optimal performance
 
- Along with this, your submitted codes are saved locally and can be retrieved when you revisit the same problem. The storage system is designed to handle over 1000+ code files, with each file being up to 200+ lines long, by automatically managing storage and deleting older codes to make space for newer ones.
+This comprehensive system combines coding, testing, and submission in one seamless interface, making your competitive programming workflow more efficient.
 
- This is done by an efficient storage management system using HashMap and Queue.
 
 ## 2. Dark Theme
 
@@ -67,6 +75,35 @@ Key features include:
 - Redesigned login and register pages for a smoother user experience.
 - Customized dark theme for various extension components to ensure consistency with our dark theme design.
 - **User Control:** You can easily toggle the `Change UI` option on or off according to your preferences, allowing you to switch seamlessly between the default user interface and the enhanced version.
+
+
+---
+
+## How to Get API Key?
+
+#### To use the run code feature, you'll need to set up an API key. Follow these steps:
+
+1. Visit [Judge0 on RapidAPI](https://rapidapi.com/dishis-technologies-judge0/api/judge029) and [Judge0 CE on RapidAPI](https://rapidapi.com/judge0-official/api/judge0-ce)
+
+2. Sign up or log in to RapidAPI
+3. Subscribe to both Judge0 and Judge0 CE (free tier available)
+
+   ![Subscribe](/public/assets/images/api-guide1.png)
+    
+    Repeat the same steps for `judge0-CE`.
+
+4. Once subscribed, you'll find your API key in the "Header Parameters" section
+5. Copy the `X-RapidAPI-Key` value
+   
+   ![Copy API Key](/public/assets/images/api-guide2.png)
+
+5. Open Codeforces Lite extension and go to "API Settings" section
+6. Click the "Edit" button and paste one of your API keys (because both APIs are same value, you can use any one of them)
+
+   ![Paste API Key](/public/assets/images/api-guide3.png)
+7. Save the key to enable the run code feature
+
+🚀 You're all set! The code execution feature is now ready to use.
 
 ---
 

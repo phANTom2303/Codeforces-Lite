@@ -19,6 +19,9 @@ export interface TopBarProps {
     handleFontSizeChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     handleResetCode: () => void;
     currentSlug: string | null;
+    isRunning: boolean;
+    runCode: () => void;
+    testCases: TestCase[];
 }
 
 export interface CodeEditorProps {
@@ -69,3 +72,11 @@ export interface OptionsProps {
     setOpenConfirmationPopup: (open: boolean) => void;
     handleTabIndent: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
+
+export interface TestCase {
+    Testcase: number;
+    Input: string;
+    ExpectedOutput: string;
+}
+
+export type TestCaseArray = TestCase[];

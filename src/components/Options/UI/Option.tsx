@@ -1,4 +1,4 @@
-import { OptionProps } from '../types/types';
+import { OptionProps } from "../../../types/types";
 
 const Option: React.FC<OptionProps> = ({ title, children }) => {
     return (

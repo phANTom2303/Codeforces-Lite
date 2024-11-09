@@ -14,6 +14,14 @@ const injectDarkModeCSS = () => {
                 filter: invert(1) hue-rotate(-160deg) !important;
             }
 
+            .problems .accepted-problem td.act {
+                background-color: #44ff44 !important;
+            }
+
+            .problems .rejected-problem td.act {
+                background-color: #ffff00 !important
+            }
+
             .red-link {
                 filter: invert(0.95) hue-rotate(-160deg) !important;
             }
@@ -97,7 +105,7 @@ const injectDarkModeCSS = () => {
                 observer.disconnect();
             }
         });
-        observer.observe(document, {childList: true, subtree: true});
+        observer.observe(document, { childList: true, subtree: true });
     }
 }
 

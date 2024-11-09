@@ -1,15 +1,17 @@
 import { githubDark, githubLight } from "@uiw/codemirror-theme-github";
-import { handleSaveTemplate } from "../utils/localStorageHelper";
-import { getLanguageExtension } from "../utils/helper";
+import { handleSaveTemplate } from "../../utils/localStorageHelper";
+import { getLanguageExtension } from "../../utils/helper";
 import { useEffect, useRef, useState } from "react";
 import { indentUnit } from "@codemirror/language";
-import { SettingsProps } from "../types/types";
+import { SettingsProps } from "../../types/types";
 import { Toaster } from "sonner";
-import Footer from "./Footer";
+import Footer from "../Footer";
 import CodeMirror from '@uiw/react-codemirror';
-import DeleteCodesConfirmationPopup from "./DeleteCodesConfirmationPopup";
-import SettingsTopBar from "./SettingsTopBar";
-import Options from './Options';
+import DeleteCodesConfirmationPopup from "../popups/DeleteCodesConfirmationPopup";
+import SettingsTopBar from "./UI/SettingsTopBar";
+import Options from './UI/Options';
+import ApiSettings from '../ApiSettings';
+
 
 const Settings: React.FC<SettingsProps> = ({ setShowOptions, theme, setTheme, tabIndent, setTabIndent }) => {
     const editor = useRef<any>(null);
@@ -72,6 +74,7 @@ const Settings: React.FC<SettingsProps> = ({ setShowOptions, theme, setTheme, ta
                         setOpenConfirmationPopup={setOpenConfirmationPopup}
                         handleTabIndent={handleTabIndent}
                     />
+                    <ApiSettings />
                     <div className="w-full flex flex-col items-center gap-2 border-t-2 border-zinc-800">
                         <div className="self-center text-base text-zinc-700 font-semibold mt-2 dark:text-zinc-200 flex justify-between w-full max-w-[400px]">
                             <div className="flex flex-col gap-1">

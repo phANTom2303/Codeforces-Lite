@@ -1,5 +1,5 @@
 import { CircleCheck, CircleX, Moon, SunMedium, Trash2 } from "lucide-react";
-import { OptionsProps } from "../types/types";
+import { OptionsProps } from "../../../types/types";
 import Option from './Option';
 
 const Options = ({ theme, setTheme, changeUI, setChangeUI, tabIndent, setOpenConfirmationPopup, handleTabIndent }: OptionsProps) => {

@@ -1,5 +1,5 @@
-import { CloudUpload, Code2, RotateCcw, Settings } from 'lucide-react';
-import { TopBarProps } from '../types/types';
+import { CloudUpload, Code2, LoaderCircle, Play, RotateCcw, Settings } from 'lucide-react';
+import { TopBarProps } from '../../types/types';
 import { useState } from 'react';
 import Timer from './CodeTimer';
 
@@ -12,7 +12,10 @@ const TopBar: React.FC<TopBarProps> = ({
     fontSize,
     handleFontSizeChange,
     handleResetCode,
-    currentSlug
+    currentSlug,
+    isRunning,
+    runCode,
+    testCases,
 }) => {
 
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
@@ -27,25 +30,57 @@ const TopBar: React.FC<TopBarProps> = ({
                     <Code2 size={20} color='green' />
                 </h1>
                 <div className='flex justify-center items-center gap-3'>
-                    <Timer theme={theme} />
-                    <div className="relative inline-block">
+                    <div className="relative inline-flex shadow-sm">
+                        <button
+                            onClick={runCode}
+                            className={`
+            ${!currentSlug && "cursor-not-allowed"}
+            h-7 px-3
+            text-white text-sm font-medium
+            bg-blue-500 hover:bg-blue-600
+            rounded-l-md
+            border-r border-blue-600
+            flex items-center gap-1
+            transition-colors
+            ${isRunning || testCases.length === 0 ? "opacity-50 cursor-not-allowed" : ""}
+        `}
+                            disabled={isRunning || testCases.length === 0}
+                        >
+                            {isRunning ?
+                                <LoaderCircle className="animate-spin w-4 h-4" /> :
+                                <>
+                                    <Play className="w-4 h-4" />
+                                    <span>Run</span>
+                                </>
+                            }
+                        </button>
+
                         <button
                             disabled={!currentSlug}
                             onClick={handleClick}
                             onMouseEnter={() => setShowTooltip(true)}
                             onMouseLeave={() => setShowTooltip(false)}
-                            className={`${!currentSlug && "cursor-not-allowed"} bg-green-500 text-white dark:text-zinc-950 font-[600] text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition duration-200 flex justify-center items-center gap-2`}
+                            className={`
+            ${!currentSlug && "cursor-not-allowed"}
+            h-7 px-3
+            bg-green-500 hover:bg-green-600
+            text-white text-sm font-medium
+            rounded-r-md
+            flex items-center gap-1
+            transition-colors
+        `}
                         >
-                            <CloudUpload size={16} />
+                            <CloudUpload className="w-4 h-4" />
                             <span>Submit</span>
                         </button>
 
                         {showTooltip && (
-                            <div className="absolute left-1/2 transform -translate-x-1/2 mt-1 w-28 bg-gray-200 dark:bg-[#222222] text-white text-xs rounded-lg text-center py-1 shadow-lg">
+                            <div className="absolute left-1/2 transform -translate-x-1/2 mt-10 ml-8 w-28 bg-gray-200 dark:bg-[#222222] text-white text-xs rounded-lg text-center py-1 shadow-lg">
                                 <span className="dark:text-white text-black"><kbd className="border border-gray-600 px-1 rounded">Ctrl</kbd> + <kbd className="border border-gray-600 px-1 rounded">Enter</kbd></span>
                             </div>
                         )}
                     </div>
+
                 </div>
                 <div className='cursor-pointer flex justify-center items-center' onClick={() => setShowOptions(true)}>
                     <Settings color={theme === 'light' ? '#444444' : '#ffffff'} size={20} />
@@ -72,7 +107,8 @@ const TopBar: React.FC<TopBarProps> = ({
                         <option className='text-black dark:text-zinc-100' value="20">20px</option>
                     </select>
                 </div>
-                <div className={`${!currentSlug && "cursor-not-allowed"} flex items-center gap-3`}>
+                <div className={`flex items-center gap-3 cursor-pointer`}>
+                    <Timer theme={theme} />
                     <RotateCcw color={theme === 'light' ? '#666666' : '#ffffff'} size={16} className='cursor-pointer' onClick={handleResetCode} />
                 </div>
             </div>

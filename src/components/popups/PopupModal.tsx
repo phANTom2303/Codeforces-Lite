@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { PopupModalProps } from "../types/types";
+import { PopupModalProps } from "../../types/types";
 
 const PopupModal = ({
   isOpen,

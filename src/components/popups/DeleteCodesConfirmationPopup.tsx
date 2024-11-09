@@ -1,7 +1,7 @@
 import React from 'react'
 import PopupModal from './PopupModal'
 import PopupBox from './PopupBox'
-import { deleteCodesFromLocalStorage } from '../utils/localStorageHelper';
+import { deleteCodesFromLocalStorage } from '../../utils/localStorageHelper';
 
 interface DeleteCodesConfirmationPopupProps {
     openConfirmationPopup: boolean;
