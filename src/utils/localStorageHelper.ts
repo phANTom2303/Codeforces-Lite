@@ -7,7 +7,6 @@ export const deleteCodesFromLocalStorage = () => {
         toast.success("Codes deleted successfully!");
     } catch (error) {
         toast.error("Failed to delete codes! Please try again later.");
-        console.log("Error deleting codes:", error);
     }
 };
 

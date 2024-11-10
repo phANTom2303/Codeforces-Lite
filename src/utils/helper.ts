@@ -87,7 +87,6 @@ export const getSlug = (problemUrl: string): string | null => {
                 return null;
         }
     } catch (error) {
-        console.error("Invalid URL or error occurred:", error);
         return null;
     }
 };

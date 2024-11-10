@@ -2,7 +2,6 @@
 const extractTestCases = async (tab) => {
     const match = tab.url.match(/\/problemset\/problem\/([0-9]+)\/([^\/]+)|\/contest\/([0-9]+)\/problem\/([^\/]+)/);
     if (!match) {
-        console.log("Invalid URL format.");
         return;
     }
 
@@ -18,7 +17,6 @@ const extractTestCases = async (tab) => {
                 const outputs = sampleTestDiv.querySelectorAll(".output pre");
 
                 if (inputs.length !== outputs.length) {
-                    console.error("Mismatch between input and output elements.");
                     return;
                 }
 

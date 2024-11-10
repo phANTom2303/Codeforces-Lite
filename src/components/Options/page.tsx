@@ -45,7 +45,6 @@ const Settings: React.FC<SettingsProps> = ({ setShowOptions, theme, setTheme, ta
     }, [changeUI]);
 
     const handleTabIndent = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-        // console.log("tab indent");
         const value = parseInt(e.target.value, 10);
         if (value >= 1 && value <= 10) {
             setTabIndent(value);

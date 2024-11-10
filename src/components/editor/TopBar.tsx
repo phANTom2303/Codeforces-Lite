@@ -18,10 +18,8 @@ const TopBar: React.FC<TopBarProps> = ({
     testCases,
 }) => {
 
-    const [showTooltip, setShowTooltip] = useState<boolean>(false);
-    if (showTooltip) {
-        console.log("showTooltip is true");
-    }
+    const [showRunTooltip, setShowRunTooltip] = useState<boolean>(false);
+    const [showSubmitTooltip, setShowSubmitTooltip] = useState<boolean>(false);
 
     return (
         <>
@@ -33,6 +31,8 @@ const TopBar: React.FC<TopBarProps> = ({
                     <div className="relative inline-flex shadow-sm">
                         <button
                             onClick={runCode}
+                            onMouseEnter={() => setShowRunTooltip(true)}
+                            onMouseLeave={() => setShowRunTooltip(false)}
                             className={`
             ${!currentSlug && "cursor-not-allowed"}
             h-7 px-3
@@ -55,16 +55,22 @@ const TopBar: React.FC<TopBarProps> = ({
                             }
                         </button>
 
+                        {showRunTooltip && (
+                            <div className="absolute left-1/1 transform -translate-x-1/2 mt-10 ml-9 w-20 bg-gray-200 dark:bg-[#222222] text-white text-xs rounded-lg text-center py-1 shadow-lg">
+                                <span className="dark:text-white text-black"><kbd className="border border-gray-600 px-1 rounded">Ctrl</kbd> + <kbd className="border border-gray-600 px-1 rounded">'</kbd></span>
+                            </div>
+                        )}
+
                         <button
                             disabled={!currentSlug}
                             onClick={handleClick}
-                            onMouseEnter={() => setShowTooltip(true)}
-                            onMouseLeave={() => setShowTooltip(false)}
+                            onMouseEnter={() => setShowSubmitTooltip(true)}
+                            onMouseLeave={() => setShowSubmitTooltip(false)}
                             className={`
             ${!currentSlug && "cursor-not-allowed"}
             h-7 px-3
             bg-green-500 hover:bg-green-600
-            text-white text-sm font-medium
+            text-black text-sm font-medium
             rounded-r-md
             flex items-center gap-1
             transition-colors
@@ -74,7 +80,7 @@ const TopBar: React.FC<TopBarProps> = ({
                             <span>Submit</span>
                         </button>
 
-                        {showTooltip && (
+                        {showSubmitTooltip && (
                             <div className="absolute left-1/2 transform -translate-x-1/2 mt-10 ml-8 w-28 bg-gray-200 dark:bg-[#222222] text-white text-xs rounded-lg text-center py-1 shadow-lg">
                                 <span className="dark:text-white text-black"><kbd className="border border-gray-600 px-1 rounded">Ctrl</kbd> + <kbd className="border border-gray-600 px-1 rounded">Enter</kbd></span>
                             </div>

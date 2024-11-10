@@ -9,7 +9,7 @@ const TestCaseNotAccess: React.FC = () => {
         <div className="flex justify-center items-center h-full rounded-lg">
             {!currentSlug ? (
                 <div className="text-center p-8 h-full flex flex-col justify-center items-center">
-                    <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-col items-center gap-4 pt-28 pb-3">
                         <FileWarning size={48} className="text-yellow-500" />
                         <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
                             No Problem Selected
@@ -40,7 +40,7 @@ const TestCaseNotAccess: React.FC = () => {
                         <p className="text-gray-600 dark:text-gray-400 mb-4">
                             Judge0 API is required to run and test your code directly in the extension. This enables:
                         </p>
-                        <ul className="text-gray-600 dark:text-gray-400 list-disc text-left max-w-md mx-auto pl-4">
+                        <ul className="text-gray-600 dark:text-gray-400 list-disc text-left max-w-md mx-auto pl-4 pb-2">
                             <li>Real-time code execution</li>
                             <li>Test case validation</li>
                             <li>Performance metrics (runtime & memory usage)</li>

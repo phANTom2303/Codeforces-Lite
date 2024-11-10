@@ -23,7 +23,7 @@ interface MainProps {
 
 const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
     const editor = useRef<any>(null);
-    
+
     // Zustand store hooks
     const {
         language,
@@ -80,6 +80,18 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
         document.addEventListener('keydown', handleKeyPress);
         return () => document.removeEventListener('keydown', handleKeyPress);
     }, []);
+
+    useEffect(() => {
+        const handleRunCode = async (event: KeyboardEvent) => {
+            if(isRunning) return;
+            if (event.ctrlKey && event.key === "'") {
+                await runCode();
+            }
+        }
+
+        document.addEventListener('keydown', handleRunCode);
+        return () => document.removeEventListener('keydown', handleRunCode);
+    }, [runCode]);
 
     useEffect(() => {
         const listener = (message: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) => {
