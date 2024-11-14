@@ -33,6 +33,8 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
         setTotalSize,
         testCases,
         isRunning,
+        isSubmitting,
+        setIsSubmitting
     } = useCFStore();
 
     // Custom hooks
@@ -40,6 +42,12 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
     const { handleResetCode, handleLanguageChange, handleFontSizeChange } = useCodeManagement(editor);
     const { loadTestCases, setupTestCaseListener } = useTestCases();
     const { handleTabEvents } = useTabEvents();
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsSubmitting(false);
+        }, 3000);
+    }, [isSubmitting, currentSlug]);
 
     useEffect(() => {
         const cleanup = setupTestCaseListener();
@@ -73,7 +81,7 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
 
         const handleKeyPress = (event: KeyboardEvent) => {
             if (event.ctrlKey && event.key === 'Enter') {
-                handleSubmission(editor);
+                handleSubmission(editor, setIsSubmitting);
             }
         };
 
@@ -83,7 +91,7 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
 
     useEffect(() => {
         const handleRunCode = async (event: KeyboardEvent) => {
-            if(isRunning) return;
+            if (isRunning) return;
             if (event.ctrlKey && event.key === "'") {
                 await runCode();
             }
@@ -106,7 +114,7 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
         <div className='flex flex-col w-full justify-start items-center h-full dark:bg-[#111111]'>
             <TopBar
                 theme={theme as "light" | "dark"}
-                handleClick={() => handleSubmission(editor)}
+                handleClick={() => handleSubmission(editor, setIsSubmitting)}
                 setShowOptions={setShowOptions}
                 language={language}
                 handleLanguageChange={handleLanguageChange}
@@ -115,6 +123,7 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
                 handleResetCode={handleResetCode}
                 currentSlug={currentSlug}
                 isRunning={isRunning}
+                isSubmitting={isSubmitting}
                 runCode={runCode}
                 testCases={testCases}
             />

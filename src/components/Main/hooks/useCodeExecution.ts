@@ -1,5 +1,6 @@
 import { useCFStore } from '../../../zustand/useCFStore';
 import { adjustCodeForJudge0 } from '../../../utils/codeAdjustments';
+import { EXECUTE_CODE_LIMIT } from '../../../data/constants';
 
 const languageMap: { [key: string]: number } = {
     'java': 62,
@@ -30,6 +31,7 @@ export const executionState = {
 // Status handler
 const handleExecutionStatus = (result: any, setErrorMessage: any) => {
     const statusHandlers: any = {
+        2: {message: 'Runtime Error', getOutput: () => result.description ? decodeURIComponent(escape(atob(result.description))) : 'In queue'},
         3: { message: null, getOutput: () => result.stdout ? decodeURIComponent(escape(atob(result.stdout))) : 'No output' },
         4: { message: 'Wrong Answer', getOutput: () => result.stdout ? decodeURIComponent(escape(atob(result.stdout))) : 'No output' },
         5: { message: 'Time Limit Exceeded', getOutput: () => 'Time Limit Exceeded' },
@@ -42,7 +44,7 @@ const handleExecutionStatus = (result: any, setErrorMessage: any) => {
         12: { message: 'Execution Timed Out', getOutput: () => 'Execution Timed Out' }
     };
 
-    const handler = statusHandlers[result.status_id] || { message: 'Unknown Error', getOutput: () => 'Unknown Error' };
+    const handler = statusHandlers[result.status_id] || { message: 'Runtime Error', getOutput: () => result.stderr ? decodeURIComponent(escape(atob(result.stderr))).trim() : 'Something went wrong' };
     setErrorMessage(handler.message);
     return handler.getOutput();
 };
@@ -91,7 +93,7 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
     const processResults = async (tokens: string[], apiKey: string) => {
         const controller = executionState.startNew();
         await new Promise((resolve, reject) => {
-            const timeout = setTimeout(resolve, (language === 'kotlin' ? 6000 : 3000) * testCases.length);
+            const timeout = setTimeout(resolve, (language === 'kotlin' ? 6000 : EXECUTE_CODE_LIMIT) * testCases.length);
             controller.signal.addEventListener('abort', () => {
                 clearTimeout(timeout);
                 reject(new DOMException('Aborted', 'AbortError'));
@@ -119,7 +121,7 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
     const processResultsAlternate = async (tokens: string[], apiKey: string) => {
         const controller = executionState.startNew();
         await new Promise((resolve, reject) => {
-            const timeout = setTimeout(resolve, (language === 'kotlin' ? 6000 : 3000) * testCases.length);
+            const timeout = setTimeout(resolve, (language === 'kotlin' ? 6000 : EXECUTE_CODE_LIMIT) * testCases.length);
             controller.signal.addEventListener('abort', () => {
                 clearTimeout(timeout);
                 reject(new DOMException('Aborted', 'AbortError'));

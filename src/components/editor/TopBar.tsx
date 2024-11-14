@@ -14,6 +14,7 @@ const TopBar: React.FC<TopBarProps> = ({
     handleResetCode,
     currentSlug,
     isRunning,
+    isSubmitting,
     runCode,
     testCases,
 }) => {
@@ -30,21 +31,20 @@ const TopBar: React.FC<TopBarProps> = ({
                 <div className='flex justify-center items-center gap-3'>
                     <div className="relative inline-flex shadow-sm">
                         <button
+                            disabled={!currentSlug || isRunning || testCases.length === 0}
                             onClick={runCode}
                             onMouseEnter={() => setShowRunTooltip(true)}
                             onMouseLeave={() => setShowRunTooltip(false)}
                             className={`
-            ${!currentSlug && "cursor-not-allowed"}
-            h-7 px-3
-            text-white text-sm font-medium
-            bg-blue-500 hover:bg-blue-600
-            rounded-l-md
-            border-r border-blue-600
-            flex items-center gap-1
-            transition-colors
-            ${isRunning || testCases.length === 0 ? "opacity-50 cursor-not-allowed" : ""}
-        `}
-                            disabled={isRunning || testCases.length === 0}
+                                ${(!currentSlug || isRunning || testCases.length === 0) && "cursor-not-allowed"}
+                                h-7 px-3
+                                text-white text-sm font-medium
+                                bg-blue-500 hover:bg-blue-600
+                                rounded-l-md
+                                border-r border-blue-600
+                                flex items-center gap-1
+                                transition-colors
+                            `}
                         >
                             {isRunning ?
                                 <LoaderCircle className="animate-spin w-4 h-4" /> :
@@ -62,22 +62,27 @@ const TopBar: React.FC<TopBarProps> = ({
                         )}
 
                         <button
-                            disabled={!currentSlug}
+                            disabled={!currentSlug || isSubmitting}
                             onClick={handleClick}
                             onMouseEnter={() => setShowSubmitTooltip(true)}
                             onMouseLeave={() => setShowSubmitTooltip(false)}
                             className={`
-            ${!currentSlug && "cursor-not-allowed"}
-            h-7 px-3
-            bg-green-500 hover:bg-green-600
-            text-black text-sm font-medium
-            rounded-r-md
-            flex items-center gap-1
-            transition-colors
-        `}
+                                ${!currentSlug && "cursor-not-allowed"}
+                                h-7 px-3
+                                bg-green-500 hover:bg-green-600
+                                text-black text-sm font-medium
+                                rounded-r-md
+                                flex items-center gap-1
+                                transition-colors
+                            `}
                         >
-                            <CloudUpload className="w-4 h-4" />
-                            <span>Submit</span>
+                            {isSubmitting ?
+                                <LoaderCircle className="animate-spin w-4 h-4" /> :
+                                <>
+                                    <CloudUpload className="w-4 h-4" />
+                                    <span>Submit</span>
+                                </>
+                            }
                         </button>
 
                         {showSubmitTooltip && (

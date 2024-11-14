@@ -20,6 +20,7 @@ export interface TopBarProps {
     handleResetCode: () => void;
     currentSlug: string | null;
     isRunning: boolean;
+    isSubmitting: boolean;
     runCode: () => void;
     testCases: TestCase[];
 }

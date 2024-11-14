@@ -30,7 +30,7 @@ export const useTabEvents = () => {
             ) {
                 const newUrl = message.url;
                 executionState.reset();
-                
+
                 setResults([]);
                 setErrorMessage('');
                 setTimeAndMemory([]);

@@ -1,5 +1,5 @@
-
-export const handleSubmission = async (editor: React.RefObject<any>) => {
+export const handleSubmission = async (editor: React.RefObject<any>, setIsSubmitting: (isSubmitting: boolean) => void) => {
+    setIsSubmitting(true);
     const editorValue = editor.current?.view?.state?.doc?.toString();
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -26,14 +26,20 @@ export const handleSubmission = async (editor: React.RefObject<any>) => {
                             submitButton.click();
                         } else {
                             alert('Submit button not found!');
+                            setIsSubmitting(false);
                         }
                     }, 200);
                 } else {
                     alert('File input not found!');
+                    setIsSubmitting(false);
                 }
             },
             args: [editorValue],
         },
-        () => chrome.runtime.lastError
+        () => {
+            if (chrome.runtime.lastError) {
+                setIsSubmitting(false);
+            }
+        }
     );
 };

@@ -8,14 +8,13 @@ const TestCaseNotAccess: React.FC = () => {
     return (
         <div className="flex justify-center items-center h-full rounded-lg">
             {!currentSlug ? (
-                <div className="text-center p-8 h-full flex flex-col justify-center items-center">
-                    <div className="flex flex-col items-center gap-4 pt-28 pb-3">
+                <div className="text-center h-full flex flex-col justify-center items-center">
+                    <div className="flex flex-col items-center justify-center gap-2 h-full">
                         <FileWarning size={48} className="text-yellow-500" />
                         <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
                             No Problem Selected
                         </h1>
                         <p className="text-gray-600 dark:text-gray-400 max-w-md flex flex-col items-center">
-                            Navigate to a Codeforces problem to access test cases and start coding
                             <a
                                 href="https://codeforces.com/problemset"
                                 target="_blank"

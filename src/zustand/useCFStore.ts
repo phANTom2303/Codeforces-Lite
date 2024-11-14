@@ -9,6 +9,7 @@ interface CFStoreInterface {
     testCases: TestCase[];
     results: string[];
     isRunning: boolean;
+    isSubmitting: boolean;
     errorMessage: string | null;
     apiKey: string;
     timeAndMemory: { time: string; memory: string }[];
@@ -21,6 +22,7 @@ interface CFStoreInterface {
     setTestCases: (cases: TestCase[]) => void;
     setResults: (results: string[]) => void;
     setIsRunning: (running: boolean) => void;
+    setIsSubmitting: (submitting: boolean) => void;
     setErrorMessage: (message: string | null) => void;
     setApiKey: (key: string) => void;
     setTimeAndMemory: (timeAndMemory: { time: string; memory: string }[]) => void;
@@ -35,6 +37,7 @@ export const useCFStore = create<CFStoreInterface>((set) => ({
     testCases: [],
     results: [],
     isRunning: false,
+    isSubmitting: false,
     errorMessage: null,
     apiKey: localStorage.getItem('judge0ApiKey') || '',
     timeAndMemory: [],
@@ -47,6 +50,7 @@ export const useCFStore = create<CFStoreInterface>((set) => ({
     setTestCases: (cases) => set({ testCases: cases }),
     setResults: (results) => set({ results }),
     setIsRunning: (running) => set({ isRunning: running }),
+    setIsSubmitting: (submitting) => set({ isSubmitting: submitting }),
     setErrorMessage: (message) => set({ errorMessage: message }),
     setApiKey: (key) => set({ apiKey: key }),
     setTimeAndMemory: (timeAndMemory) => set({ timeAndMemory }),

@@ -13,7 +13,7 @@ export const useCodeManagement = (editor: React.RefObject<any>) => {
             return;
         }
         const temmplateCode = localStorage.getItem('template') || '';
-        loadCodeWithCursor(editor, temmplateCode);
+        loadCodeWithCursor(editor.current, temmplateCode);
     };
 
     const handleLanguageChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {

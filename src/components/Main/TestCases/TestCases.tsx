@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { TestCase } from '../../../types/types';
 import { MAX_TEST_CASES } from '../../../data/constants';
 import { useCFStore } from '../../../zustand/useCFStore';
@@ -19,6 +19,21 @@ const TestCases = () => {
     const setErrorMessage = useCFStore((state) => state.setErrorMessage);
     const isRunning = useCFStore((state) => state.isRunning);
     const [copied, setCopied] = useState<{ input: boolean, expectedOutput: boolean, output: boolean }>({ input: false, expectedOutput: false, output: false });
+
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const outputRef = useRef<HTMLTextAreaElement>(null);
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.style.height = 'auto';
+            inputRef.current.style.height = inputRef.current.scrollHeight + 'px';
+        }
+        if (outputRef.current) {
+            outputRef.current.style.height = 'auto';
+            outputRef.current.style.height = outputRef.current.scrollHeight + 'px';
+        }
+    }, [currentSlug ,testCases, selectedTab]);
+
     const isAllTestCasesPassed = () => {
         if (!results || results.length === 0 || testCases.length === 0 || results.length !== testCases.length) {
             return false;
@@ -179,91 +194,111 @@ const TestCases = () => {
                         {getStatusMessage()}
                     </div>
 
-                    <div className="flex gap-2 mb-2 pr-3 py-3 overflow-x-auto whitespace-nowrap">
-                        {testCases.map((_, index) => (
-                            <div key={index} className="relative group">
+                    {errorMessage ? (
+                        <div className='mt-3'>
+                            <div className="relative">
+                                <div className={`p-2 rounded-md whitespace-pre-wrap ${results[selectedTab]?.trim() === testCases[selectedTab]?.ExpectedOutput.trim()
+                                    ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                                    : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                                    }`}>
+                                    {results[selectedTab]}
+                                </div>
                                 <button
-                                    onClick={() => setSelectedTab(index)}
-                                    className={`w-24 px-2 py-1 text-base font-medium rounded-lg transition-colors duration-200 border-b-2 ${getTabStyle(index)}`}
+                                    onClick={() => handleCopy(results[selectedTab], 'output')}
+                                    className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
                                 >
-                                    Case {index + 1}
-                                </button>
-                                <button
-                                    onClick={() => removeTestCase(index)}
-                                    className={`absolute hidden group-hover:flex -top-1.5 -right-1.5 text-xs text-gray-400 hover:text-gray-600 rounded-full w-4 h-4 items-center justify-center ${isRunning ? "opacity-50 cursor-not-allowed" : ""}`}
-                                    disabled={isRunning}
-                                >
-                                    <CircleX />
+                                    {copied.output ? <Check size={16} /> : <Copy size={16} />}
                                 </button>
                             </div>
-                        ))}
-                    </div>
-
-                    {testCases.length > 0 && selectedTab < testCases.length && (
-                        <div className="flex flex-col p-2">
-                            <div>
-                                <div className="relative">
-                                    <label className="text-sm text-gray-700 dark:text-gray-300">
-                                        <h2 className="text-base font-[600] pb-1">Input</h2>
-                                        <textarea
-                                            value={testCases[selectedTab].Input}
-                                            onChange={(e) => handleInputChange(selectedTab, e.target.value)}
-                                            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors duration-200"
-                                            rows={3}
-                                        />
-                                    </label>
-                                    <button
-                                        onClick={() => handleCopy(testCases[selectedTab].Input, 'input')}
-                                        className="absolute top-8 right-2 text-gray-400 hover:text-gray-600"
-                                    >
-                                        {copied.input ? <Check size={16} /> : <Copy size={16} />}
-                                    </button>
-                                </div>
-
-                                <div className="relative mt-4">
-                                    <label className="text-sm text-gray-700 dark:text-gray-300">
-                                        <h2 className="text-base font-[600] pb-1">Expected Output</h2>
-                                        <textarea
-                                            value={testCases[selectedTab].ExpectedOutput}
-                                            onChange={(e) => handleExpectedOutputChange(selectedTab, e.target.value)}
-                                            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors duration-200"
-                                            rows={3}
-                                        />
-                                    </label>
-                                    <button
-                                        onClick={() => handleCopy(testCases[selectedTab].ExpectedOutput, 'expectedOutput')}
-                                        className="absolute top-8 right-2 text-gray-400 hover:text-gray-600"
-                                    >
-                                        {copied.expectedOutput ? <Check size={16} /> : <Copy size={16} />}
-                                    </button>
-                                </div>
-                            </div>
-
-                            {results[selectedTab] && (
-                                <div className="mt-4">
-                                    <h2 className="text-base font-[600] pb-1 text-zinc-500">Output</h2>
-                                    <div className="relative">  {/* Add this wrapper div */}
-                                        <div className={`p-2 rounded-md whitespace-pre-wrap ${results[selectedTab].trim() === testCases[selectedTab].ExpectedOutput.trim()
-                                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                                            : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
-                                            }`}>
-                                            {results[selectedTab]}
-                                        </div>
-
+                        </div>
+                    ) : (
+                        <>
+                            <div className="flex gap-2 mb-2 pr-3 py-3 overflow-x-auto whitespace-nowrap">
+                                {testCases.map((_, index) => (
+                                    <div key={index} className="relative group">
                                         <button
-                                            onClick={() => handleCopy(results[selectedTab], 'output')}
-                                            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                                            onClick={() => setSelectedTab(index)}
+                                            className={`w-24 px-2 py-1 text-base font-medium rounded-lg transition-colors duration-200 border-b-2 ${getTabStyle(index)}`}
                                         >
-                                            {copied.output ? <Check size={16} /> : <Copy size={16} />}
+                                            Case {index + 1}
+                                        </button>
+                                        <button
+                                            onClick={() => removeTestCase(index)}
+                                            className={`absolute hidden group-hover:flex -top-1.5 -right-1.5 text-xs text-gray-400 hover:text-gray-600 rounded-full w-4 h-4 items-center justify-center ${isRunning ? "opacity-50 cursor-not-allowed" : ""}`}
+                                            disabled={isRunning}
+                                        >
+                                            <CircleX />
                                         </button>
                                     </div>
+                                ))}
+                            </div>
+
+                            {testCases.length > 0 && selectedTab < testCases.length && (
+                                <div className="flex flex-col p-2">
+                                    <div>
+                                        <div className="relative">
+                                            <label className="text-sm text-gray-700 dark:text-gray-300">
+                                                <h2 className="text-base font-[600] pb-1">Input</h2>
+                                                <textarea
+                                                    ref={inputRef}
+                                                    value={testCases[selectedTab].Input}
+                                                    onChange={(e) => handleInputChange(selectedTab, e.target.value)}
+                                                    className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors duration-200"
+                                                />
+                                            </label>
+                                            <button
+                                                onClick={() => handleCopy(testCases[selectedTab].Input, 'input')}
+                                                className="absolute top-8 right-2 text-gray-400 hover:text-gray-600"
+                                            >
+                                                {copied.input ? <Check size={16} /> : <Copy size={16} />}
+                                            </button>
+                                        </div>
+
+                                        <div className="relative mt-4">
+                                            <label className="text-sm text-gray-700 dark:text-gray-300">
+                                                <h2 className="text-base font-[600] pb-1">Expected Output</h2>
+                                                <textarea
+                                                    ref={outputRef}
+                                                    value={testCases[selectedTab].ExpectedOutput}
+                                                    onChange={(e) => handleExpectedOutputChange(selectedTab, e.target.value)}
+                                                    className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors duration-200"
+                                                />
+                                            </label>
+                                            <button
+                                                onClick={() => handleCopy(testCases[selectedTab].ExpectedOutput, 'expectedOutput')}
+                                                className="absolute top-8 right-2 text-gray-400 hover:text-gray-600"
+                                            >
+                                                {copied.expectedOutput ? <Check size={16} /> : <Copy size={16} />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {results[selectedTab] && (
+                                        <div className="mt-4">
+                                            <h2 className="text-base font-[600] pb-1 text-zinc-500">Output</h2>
+                                            <div className="relative">  {/* Add this wrapper div */}
+                                                <div className={`p-2 rounded-md whitespace-pre-wrap ${results[selectedTab].trim() === testCases[selectedTab].ExpectedOutput.trim()
+                                                    ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                                                    : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                                                    }`}>
+                                                    {results[selectedTab]}
+                                                </div>
+
+                                                <button
+                                                    onClick={() => handleCopy(results[selectedTab], 'output')}
+                                                    className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                                                >
+                                                    {copied.output ? <Check size={16} /> : <Copy size={16} />}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
-
-                        </div>
+                        </>
                     )}
 
-                    {/* {errorMessage && <p className="text-red-500 mt-2 pl-3">{errorMessage}</p>} */}
+
                 </div>
             )}
         </>
