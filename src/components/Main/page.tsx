@@ -39,7 +39,7 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
 
     // Custom hooks
     const { runCode } = useCodeExecution(editor);
-    const { handleResetCode, handleLanguageChange, handleFontSizeChange } = useCodeManagement(editor);
+    const { handleResetCode, handleLanguageChange, handleFontSizeChange, handleRedirectToLatestSubmission } = useCodeManagement(editor);
     const { loadTestCases, setupTestCaseListener } = useTestCases();
     const { handleTabEvents } = useTabEvents();
 
@@ -121,6 +121,7 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
                 fontSize={fontSize}
                 handleFontSizeChange={handleFontSizeChange}
                 handleResetCode={handleResetCode}
+                handleRedirectToLatestSubmission={handleRedirectToLatestSubmission}
                 currentSlug={currentSlug}
                 isRunning={isRunning}
                 isSubmitting={isSubmitting}
