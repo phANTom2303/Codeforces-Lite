@@ -18,8 +18,16 @@ const injectDarkModeCSS = () => {
                 background-color: #44ff44 !important;
             }
 
+            .problems .accepted-problem td.id {
+                border-left: 6px solid #44ff44 !important;
+            }
+
             .problems .rejected-problem td.act {
                 background-color: #ffff00 !important
+            }
+
+            .problems .rejected-problem td.id {
+                border-left: 6px solid #ffff00 !important;
             }
 
             .red-link {
