@@ -31,7 +31,7 @@ export const executionState = {
 // Status handler
 const handleExecutionStatus = (result: any, setErrorMessage: any) => {
     const statusHandlers: any = {
-        2: {message: 'Runtime Error', getOutput: () => result.description ? decodeURIComponent(escape(atob(result.description))) : 'In queue'},
+        2: { message: 'Runtime Error', getOutput: () => result.description ? decodeURIComponent(escape(atob(result.description))) : 'In queue' },
         3: { message: null, getOutput: () => result.stdout ? decodeURIComponent(escape(atob(result.stdout))) : 'No output' },
         4: { message: 'Wrong Answer', getOutput: () => result.stdout ? decodeURIComponent(escape(atob(result.stdout))) : 'No output' },
         5: { message: 'Time Limit Exceeded', getOutput: () => 'Time Limit Exceeded' },
@@ -67,6 +67,8 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
     const setErrorMessage = useCFStore(state => state.setErrorMessage);
     const setIsRunning = useCFStore(state => state.setIsRunning);
     const setTimeAndMemory = useCFStore(state => state.setTimeAndMemory);
+
+    let apiRequestLimit = true;
 
     const resetStates = () => {
         setResults([]);
@@ -212,6 +214,14 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
 
             for (const result of results.submissions) {
                 if (!result) continue;
+
+                if (result?.status_id === 2 && apiRequestLimit) {
+                    apiRequestLimit = false;
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    await processResults(tokens, apiKey);
+                    return;
+                }
+
                 timeMemoryResults.push(getTimeAndMemory(result));
                 outputResults.push(handleExecutionStatus(result, setErrorMessage));
             }
@@ -262,6 +272,14 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
 
             for (const result of results.submissions) {
                 if (!result) continue;
+
+                if (result?.status_id === 2 && apiRequestLimit) {
+                    apiRequestLimit = false;
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    await processResultsAlternate(tokens, apiKey);
+                    return;
+                }
+
                 timeMemoryResults.push(getTimeAndMemory(result));
                 outputResults.push(handleExecutionStatus(result, setErrorMessage));
             }
@@ -293,7 +311,13 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
                 return;
             }
 
-            const result = await processResults(submission.token, apiKey);
+            let result = await processResults(submission.token, apiKey);
+
+            if (result?.status_id === 2) {
+                console.log('api call limit reached, executing again...');
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                result = await processResults(submission.token, apiKey);
+            }
 
             const outputResults: string[] = [];
             const timeMemoryResults: { time: string; memory: string }[] = [];
@@ -336,6 +360,13 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
                 }
                 const result = await processResultsAlternate(submission.token, apiKey);
 
+                if (result?.status_id === 2 && apiRequestLimit) {
+                    apiRequestLimit = false;
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    await processResultsAlternate(submission.token, apiKey);
+                    return;
+                }
+
                 timeMemoryResults.push(getTimeAndMemory(result));
                 outputResults.push(handleExecutionStatus(result, setErrorMessage));
             }
@@ -360,6 +391,7 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
     };
 
     const runCode = async () => {
+        apiRequestLimit = true;
         setIsRunning(true);
         setResults([]);
         setErrorMessage(null);
