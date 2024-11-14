@@ -1,4 +1,4 @@
-import { CloudUpload, Code2, LoaderCircle, Play, RotateCcw, Settings } from 'lucide-react';
+import { Braces, CloudUpload, Code2, LoaderCircle, Play, RotateCcw, Settings } from 'lucide-react';
 import { TopBarProps } from '../../types/types';
 import { useState } from 'react';
 import Timer from './CodeTimer';
@@ -9,10 +9,11 @@ const TopBar: React.FC<TopBarProps> = ({
     handleClick,
     setShowOptions,
     language,
-    handleLanguageChange,
     fontSize,
+    handleLanguageChange,
     handleFontSizeChange,
     handleResetCode,
+    handleRedirectToLatestSubmission,
     currentSlug,
     isRunning,
     isSubmitting,
@@ -120,8 +121,9 @@ const TopBar: React.FC<TopBarProps> = ({
                         <option className='text-black dark:text-zinc-100' value="20">20px</option>
                     </select>
                 </div>
-                <div className={`flex items-center gap-3 cursor-pointer`}>
+                <div className={`flex items-center gap-2 cursor-pointer`}>
                     <Timer theme={theme} />
+                    <Braces color={theme === 'light' ? '#666666' : '#ffffff'} size={16} className='cursor-pointer' onClick={handleRedirectToLatestSubmission}/>
                     <RotateCcw color={theme === 'light' ? '#666666' : '#ffffff'} size={16} className='cursor-pointer' onClick={handleResetCode} />
                 </div>
             </div>

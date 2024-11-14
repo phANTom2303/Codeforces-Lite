@@ -53,7 +53,7 @@ export const useCodeManagement = (editor: React.RefObject<any>) => {
         const selectedFontSize = parseInt(e.target.value, 10);
         setFontSize(selectedFontSize);
         localStorage.setItem('preferredFontSize', selectedFontSize.toString());
-        
+
         setTimeout(() => {
             editor.current.view?.dispatch({
                 changes: { from: 0, to: editor.current.view.state.doc.length, insert: editorValue },
@@ -61,9 +61,32 @@ export const useCodeManagement = (editor: React.RefObject<any>) => {
         }, 100);
     };
 
+    const handleRedirectToLatestSubmission = async () => {
+        let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+        chrome.scripting.executeScript(
+            {
+                target: { tabId: tab.id! },
+                func: () => {
+                    const anchor = document.querySelector('.roundbox.sidebox .rtable tbody tr td a') as HTMLAnchorElement;
+                    if (anchor) {
+                        window.location.href = anchor.href;
+                    }
+                },
+            },
+            () => {
+                if (chrome.runtime.lastError) {
+                    console.error(chrome.runtime.lastError.message);
+                }
+            }
+        );
+    };
+
+
     return {
         handleResetCode,
         handleLanguageChange,
-        handleFontSizeChange
+        handleFontSizeChange,
+        handleRedirectToLatestSubmission
     };
 };

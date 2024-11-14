@@ -68,8 +68,6 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
     const setIsRunning = useCFStore(state => state.setIsRunning);
     const setTimeAndMemory = useCFStore(state => state.setTimeAndMemory);
 
-    let apiRequestLimit = true;
-
     const resetStates = () => {
         setResults([]);
         setTimeAndMemory([]);
@@ -200,7 +198,7 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
             }
 
             const tokens = batchResponse.map(submission => submission.token);
-            const results = await processResults(tokens, apiKey);
+            let results = await processResults(tokens, apiKey);
 
             if (!results?.submissions) {
                 setErrorMessage(`Compilation Error`);
@@ -215,11 +213,9 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
             for (const result of results.submissions) {
                 if (!result) continue;
 
-                if (result?.status_id === 2 && apiRequestLimit) {
-                    apiRequestLimit = false;
+                if (result?.status_id === 2) {
                     await new Promise(resolve => setTimeout(resolve, 3000));
-                    await processResults(tokens, apiKey);
-                    return;
+                    results = await processResults(tokens, apiKey);
                 }
 
                 timeMemoryResults.push(getTimeAndMemory(result));
@@ -259,7 +255,7 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
             }
 
             const tokens = batchResponse.map(submission => submission.token);
-            const results = await processResultsAlternate(tokens, apiKey);
+            let results = await processResultsAlternate(tokens, apiKey);
 
             if (!results?.submissions) {
                 setErrorMessage(`Compilation Error`);
@@ -273,11 +269,9 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
             for (const result of results.submissions) {
                 if (!result) continue;
 
-                if (result?.status_id === 2 && apiRequestLimit) {
-                    apiRequestLimit = false;
+                if (result?.status_id === 2) {
                     await new Promise(resolve => setTimeout(resolve, 3000));
-                    await processResultsAlternate(tokens, apiKey);
-                    return;
+                    results = await processResultsAlternate(tokens, apiKey);
                 }
 
                 timeMemoryResults.push(getTimeAndMemory(result));
@@ -314,7 +308,6 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
             let result = await processResults(submission.token, apiKey);
 
             if (result?.status_id === 2) {
-                console.log('api call limit reached, executing again...');
                 await new Promise(resolve => setTimeout(resolve, 3000));
                 result = await processResults(submission.token, apiKey);
             }
@@ -358,13 +351,11 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
                     outputResults.push('Something went wrong.');
                     continue;
                 }
-                const result = await processResultsAlternate(submission.token, apiKey);
+                let result = await processResultsAlternate(submission.token, apiKey);
 
-                if (result?.status_id === 2 && apiRequestLimit) {
-                    apiRequestLimit = false;
+                if (result?.status_id === 2) {
                     await new Promise(resolve => setTimeout(resolve, 3000));
-                    await processResultsAlternate(submission.token, apiKey);
-                    return;
+                    result = await processResultsAlternate(submission.token, apiKey);
                 }
 
                 timeMemoryResults.push(getTimeAndMemory(result));
@@ -391,7 +382,6 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
     };
 
     const runCode = async () => {
-        apiRequestLimit = true;
         setIsRunning(true);
         setResults([]);
         setErrorMessage(null);
