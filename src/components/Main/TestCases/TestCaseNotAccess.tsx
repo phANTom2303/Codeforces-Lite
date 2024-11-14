@@ -37,7 +37,7 @@ const TestCaseNotAccess: React.FC = () => {
                     <ApiSettings />
                     <div className="text-center mb-6">
                         <p className="text-gray-600 dark:text-gray-400 mb-4">
-                            Judge0 API is required to run and test your code directly in the extension. This enables:
+                            Judge0 API is required to run and test your code directly in the extension.
                         </p>
                         <ul className="text-gray-600 dark:text-gray-400 list-disc text-left max-w-md mx-auto pl-4 pb-2">
                             <li>Real-time code execution</li>
