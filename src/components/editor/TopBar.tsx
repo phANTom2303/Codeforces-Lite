@@ -123,8 +123,18 @@ const TopBar: React.FC<TopBarProps> = ({
                 </div>
                 <div className={`flex items-center gap-2 cursor-pointer`}>
                     <Timer theme={theme} />
-                    <Braces color={theme === 'light' ? '#666666' : '#ffffff'} size={16} className='cursor-pointer' onClick={handleRedirectToLatestSubmission}/>
-                    <RotateCcw color={theme === 'light' ? '#666666' : '#ffffff'} size={16} className='cursor-pointer' onClick={handleResetCode} />
+                    <button
+                        disabled={!currentSlug}
+                        title='Latest Submission'
+                    >
+                        <Braces color={theme === 'light' ? '#666666' : '#ffffff'} size={16} className={`${!currentSlug ? 'cursor-not-allowed' : 'cursor-pointer'}`} onClick={handleRedirectToLatestSubmission} />
+                    </button>
+                    <button
+                        disabled={!currentSlug}
+                        title='Reset Code'
+                    >
+                        <RotateCcw color={theme === 'light' ? '#666666' : '#ffffff'} size={16} className={`${!currentSlug ? 'cursor-not-allowed' : 'cursor-pointer'}`} onClick={handleResetCode} />
+                    </button>
                 </div>
             </div>
         </>

@@ -62,6 +62,9 @@ export const useCodeManagement = (editor: React.RefObject<any>) => {
     };
 
     const handleRedirectToLatestSubmission = async () => {
+        if (!currentSlug) {
+            return;
+        }
         let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
         chrome.scripting.executeScript(
@@ -69,6 +72,10 @@ export const useCodeManagement = (editor: React.RefObject<any>) => {
                 target: { tabId: tab.id! },
                 func: () => {
                     const anchor = document.querySelector('.roundbox.sidebox .rtable tbody tr td a') as HTMLAnchorElement;
+                    if(!anchor) {
+                        alert('No submission found');
+                        return;
+                    }
                     if (anchor) {
                         window.location.href = anchor.href;
                     }

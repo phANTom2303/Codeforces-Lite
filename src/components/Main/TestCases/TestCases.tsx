@@ -50,7 +50,7 @@ const TestCases = () => {
                     <div className="text-base font-medium text-green-500">Accepted</div>
                     {timeAndMemory[selectedTab] && (
                         <div className="text-xs text-gray-500">
-                            Runtime: {timeAndMemory[selectedTab].time}ms, Memory: {timeAndMemory[selectedTab].memory}KB
+                            Used: {timeAndMemory[selectedTab].time}ms, {timeAndMemory[selectedTab].memory}KB
                         </div>
                     )}
                 </div>
@@ -71,7 +71,7 @@ const TestCases = () => {
                     <div className="text-base font-medium text-red-500">Wrong Answer</div>
                     {timeAndMemory[selectedTab] && (
                         <div className="text-xs text-gray-500">
-                            Runtime: {timeAndMemory[selectedTab].time}ms, Memory: {timeAndMemory[selectedTab].memory}KB
+                            Used: {timeAndMemory[selectedTab].time}ms, {timeAndMemory[selectedTab].memory}KB
                         </div>
                     )}
                 </div>
