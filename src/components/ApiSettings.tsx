@@ -47,7 +47,7 @@ const ApiSettings: React.FC = () => {
         <div className="w-full max-w-2xl mx-auto py-4 border-t-2 border-zinc-800">
             <div className='flex items-center justify-between mb-4'>
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-white">API Settings</h2>
-                <a className='text-blue-500 hover:text-blue-600 flex items-center gap-1' href="https://rapidapi.com/dishis-technologies-judge0/api/judge029" target='_blank'>
+                <a className='text-blue-500 hover:text-blue-600 flex items-center gap-1' href="https://github.com/MaanasSehgal/Codeforces-Lite?tab=readme-ov-file#how-to-get-api-key" target='_blank'>
                     How to get API key?
                     <ExternalLink size={10} />
                 </a>

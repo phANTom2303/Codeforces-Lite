@@ -42,13 +42,13 @@ This comprehensive system combines coding, testing, and submission in one seamle
 
 ## 2. Code Execution
 ### API CONFIGURATION
-![Dark Theme Support](/public/assets/images/v1.1preview1.png)
+![API Config](/public/assets/images/v1.1preview1.png)
 
 ### COMPILATION RESULTS HANDLING
-![Dark Theme Support](/public/assets/images/v1.1preview2.png)
+![Compilation Results](/public/assets/images/v1.1preview2.png)
 
 ### LIMITATIONS AND FUTURE ENHANCEMENTS
-![Dark Theme Support](/public/assets/images/v1.1preview3.png)
+![Limitations](/public/assets/images/v1.1preview3.png)
 
 
 ## 3. Dark Theme
@@ -93,7 +93,7 @@ This comprehensive system combines coding, testing, and submission in one seamle
 
 #### To use the run code feature, you'll need to set up an API key. Follow these steps:
 
-### NOTE: If you have already signed in to Judge0 and want to access the API key, go to the link below and click on "Get a Submission" in the left side panel, after that you will be redirected to the page, where you can access the API key as shown in Point 5 below.
+#### NOTE: If you have already subscribed to Judge0 and want to access the API key, go to the link below and click on `Get a Submission` in the left-side panel. You will then be redirected to a page where you can access the API key, as shown in Point 5 below. Please note that both Judge0 and Judge0 CE are required.
 
 1. Visit [Judge0 on RapidAPI](https://rapidapi.com/dishis-technologies-judge0/api/judge029) and [Judge0 CE on RapidAPI](https://rapidapi.com/judge0-official/api/judge0-ce)
 
