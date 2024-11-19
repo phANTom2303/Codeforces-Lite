@@ -171,6 +171,7 @@ This comprehensive system combines coding, testing, and submission in one seamle
 
 ![UI Improvement Example](/public/assets/images/preview5.png)
 
+This extension was primarily developed by **Maanas Sehgal** and **Devendra Suryavanshi**.
 
 | Developer                | LinkedIn                                                     | GitHub                                           |
 | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------ |
