@@ -40,8 +40,18 @@ Key features include:
 
 This comprehensive system combines coding, testing, and submission in one seamless interface, making your competitive programming workflow more efficient.
 
+## 2. Code Execution
+### API CONFIGURATION
+![Dark Theme Support](/public/assets/images/v1.1preview1.png)
 
-## 2. Dark Theme
+### COMPILATION RESULTS HANDLING
+![Dark Theme Support](/public/assets/images/v1.1preview2.png)
+
+### LIMITATIONS AND FUTURE ENHANCEMENTS
+![Dark Theme Support](/public/assets/images/v1.1preview3.png)
+
+
+## 3. Dark Theme
 
 ![Dark Theme Support](/public/assets/images/preview3.png)
 
@@ -55,7 +65,7 @@ This comprehensive system combines coding, testing, and submission in one seamle
 - **User Control:** You can toggle the dark theme on or off based on your preferences, allowing you to switch between light and dark modes seamlessly.
 
 
-## 3. Custom Templates and Default Cursor Placement
+## 4. Custom Templates and Default Cursor Placement
 
 #### With Codeforces Lite, you can set up custom templates that automatically load whenever you start solving a new problem. This feature helps you avoid the repetitive task of setting up your environment or writing boilerplate code from scratch.
 
@@ -63,7 +73,7 @@ This comprehensive system combines coding, testing, and submission in one seamle
 
 #### Additionally, you can specify the exact position for your cursor using the `$0` symbol in your template, allowing you to start typing right where you need. The extension also remembers the cursor’s position when switching tabs and revisiting problems, ensuring you pick up exactly where you left off—saving valuable time during contests.
 
-## 4. UI Enhancements
+## 5. UI Enhancements
 
 ![UI Enhancements](/public/assets/images/preview4.png)
 
@@ -82,6 +92,8 @@ This comprehensive system combines coding, testing, and submission in one seamle
 ## How to Get API Key?
 
 #### To use the run code feature, you'll need to set up an API key. Follow these steps:
+
+### NOTE: If you have already signed in to Judge0 and want to access the API key, go to the link below and click on "Get a Submission" in the left side panel, after that you will be redirected to the page, where you can access the API key as shown in Point 5 below.
 
 1. Visit [Judge0 on RapidAPI](https://rapidapi.com/dishis-technologies-judge0/api/judge029) and [Judge0 CE on RapidAPI](https://rapidapi.com/judge0-official/api/judge0-ce)
 
