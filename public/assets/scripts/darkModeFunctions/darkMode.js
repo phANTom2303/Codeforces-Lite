@@ -142,14 +142,3 @@ const removeSortToggleImgInvert = () => {
         imgElements[1].classList.remove("custom-image");
     });
 };
-
-document.addEventListener('DOMContentLoaded', () => {
-    injectDarkModeCSS();
-    sortToggleImgInvert();
-});
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectDarkModeCSS);
-} else {
-    injectDarkModeCSS();
-}
