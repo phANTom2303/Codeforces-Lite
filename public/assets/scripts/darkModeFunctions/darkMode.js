@@ -103,6 +103,9 @@ const injectDarkModeCSS = () => {
                 color: #121212;
             }
         `;
+        document.addEventListener("DOMContentLoaded", () => {
+            document.head.appendChild(styleElement);
+        });
 
     if (document.head) {
         document.head.appendChild(styleElement);

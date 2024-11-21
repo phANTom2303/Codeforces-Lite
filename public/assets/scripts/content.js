@@ -15,9 +15,6 @@ chrome.storage.local.get("theme").then((result) => {
     if (result.theme === "dark") {
         injectDarkModeCSS();
         sortToggleImgInvert();
-        document.addEventListener("DOMContentLoaded", () => {
-            injectDarkModeCSS();
-        });
     }
 });
 
