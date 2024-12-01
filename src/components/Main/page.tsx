@@ -98,6 +98,10 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
                     alert('Please add your API to use the run code feature.');
                     return;
                 }
+                if(!currentSlug) {
+                    alert('Please select a problem to run code.');
+                    return;
+                }
                 await runCode();
             }
         }
