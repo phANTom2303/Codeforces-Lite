@@ -149,12 +149,12 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
     // Unified API handlers
     const makeJudge0CERequest = async (endpoint: string, options: any, apiKey: string) => {
         const controller = executionState.startNew();
-        return fetch(`https://judge0-ce.p.rapidapi.com/${endpoint}`, {
+        return fetch(`https://judge0-ce.p.sulu.sh/${endpoint}`, {
             ...options,
             headers: {
+                'Accept': 'application/json',
                 ...options.headers,
-                'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
-                'X-RapidAPI-Key': apiKey
+                'Authorization': `Bearer ${apiKey}`
             },
             signal: controller.signal
         });
@@ -162,12 +162,12 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
 
     const makeJudge029Request = async (endpoint: string, options: any, apiKey: string) => {
         const controller = executionState.startNew();
-        return fetch(`https://judge029.p.rapidapi.com/${endpoint}`, {
+        return fetch(`https://judge0-ce.p.sulu.sh/${endpoint}`, {
             ...options,
             headers: {
+                'Accept': 'application/json',
                 ...options.headers,
-                'x-rapidapi-host': 'judge029.p.rapidapi.com',
-                'x-rapidapi-key': apiKey
+                'Authorization': `Bearer ${apiKey}`
             },
             signal: controller.signal
         });
