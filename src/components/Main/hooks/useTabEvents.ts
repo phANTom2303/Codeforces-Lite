@@ -10,9 +10,7 @@ export const useTabEvents = () => {
     const currentSlug = useCFStore(state => state.currentSlug);
     const setCurrentSlug = useCFStore(state => state.setCurrentSlug);
     const testCases = useCFStore(state => state.testCases);
-    const setResults = useCFStore(state => state.setResults);
-    const setErrorMessage = useCFStore(state => state.setErrorMessage);
-    const setTimeAndMemory = useCFStore(state => state.setTimeAndMemory);
+    const setIsRunning = useCFStore(state => state.setIsRunning);
     const { loadTestCases } = useTestCases();
 
     const handleTabEvents = async (
@@ -30,14 +28,11 @@ export const useTabEvents = () => {
             ) {
                 const newUrl = message.url;
                 executionState.reset();
-
-                setResults([]);
-                setErrorMessage('');
-                setTimeAndMemory([]);
+                setIsRunning(false);
 
                 if (currentSlug) {
                     await saveCodeForSlug(currentSlug, editor, useCFStore.getState().totalSize, useCFStore.getState().setTotalSize);
-                    if (testCases && testCases.length > 0) {
+                    if (testCases && testCases.testCases.length > 0) {
                         await saveTestCaseForSlug(currentSlug, testCases);
                     }
                 }

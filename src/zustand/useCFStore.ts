@@ -1,31 +1,25 @@
 import { create } from "zustand";
-import { TestCase } from "../types/types";
+import { TestCaseArray } from "../types/types";
 
 interface CFStoreInterface {
     language: string;
     fontSize: number;
     currentSlug: string | null;
     totalSize: number;
-    testCases: TestCase[];
-    results: string[];
+    testCases: TestCaseArray;
     isRunning: boolean;
     isSubmitting: boolean;
-    errorMessage: string | null;
     apiKey: string;
-    timeAndMemory: { time: string; memory: string }[];
 
     // Actions
     setLanguage: (language: string) => void;
     setFontSize: (size: number) => void;
     setCurrentSlug: (slug: string | null) => void;
     setTotalSize: (size: number) => void;
-    setTestCases: (cases: TestCase[]) => void;
-    setResults: (results: string[]) => void;
+    setTestCases: (testCases: TestCaseArray) => void;
     setIsRunning: (running: boolean) => void;
     setIsSubmitting: (submitting: boolean) => void;
-    setErrorMessage: (message: string | null) => void;
     setApiKey: (key: string) => void;
-    setTimeAndMemory: (timeAndMemory: { time: string; memory: string }[]) => void;
 }
 
 export const useCFStore = create<CFStoreInterface>((set) => ({
@@ -34,24 +28,18 @@ export const useCFStore = create<CFStoreInterface>((set) => ({
     fontSize: parseInt(localStorage.getItem('preferredFontSize') || '16', 10),
     currentSlug: null,
     totalSize: 0,
-    testCases: [],
-    results: [],
+    testCases: {ErrorMessage: '', testCases: []},
     isRunning: false,
     isSubmitting: false,
-    errorMessage: null,
     apiKey: localStorage.getItem('judge0ApiKey') || '',
-    timeAndMemory: [],
 
     // Actions
     setLanguage: (language) => set({ language }),
     setFontSize: (size) => set({ fontSize: size }),
     setCurrentSlug: (slug) => set({ currentSlug: slug }),
     setTotalSize: (size) => set({ totalSize: size }),
-    setTestCases: (cases) => set({ testCases: cases }),
-    setResults: (results) => set({ results }),
+    setTestCases: (testCases) => set({ testCases }),
     setIsRunning: (running) => set({ isRunning: running }),
     setIsSubmitting: (submitting) => set({ isSubmitting: submitting }),
-    setErrorMessage: (message) => set({ errorMessage: message }),
     setApiKey: (key) => set({ apiKey: key }),
-    setTimeAndMemory: (timeAndMemory) => set({ timeAndMemory }),
 }));

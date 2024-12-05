@@ -2,14 +2,14 @@ import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
-import { CodeEntry, TestCase } from "../types/types";
+import { CodeEntry, TestCaseArray } from "../types/types";
 import { Queue } from "./Queue";
 
 // In-memory storage for Map and Queue
-let testCaseMap: Map<string, TestCase[]> = new Map<string, TestCase[]>();
+let testCaseMap: Map<string, TestCaseArray> = new Map<string, TestCaseArray>();
 let testCaseQueue: Queue<string> = new Queue<string>();
 
-export const getTestCaseMap = (): Map<string, TestCase[]> => {
+export const getTestCaseMap = (): Map<string, TestCaseArray> => {
     return testCaseMap;
 };
 

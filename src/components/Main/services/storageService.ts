@@ -1,4 +1,4 @@
-import { CodeEntry, TestCase } from '../../../types/types';
+import { CodeEntry, TestCaseArray } from '../../../types/types';
 import { getCodeMap, getSlugQueue, getTestCaseMap, getTestCaseQueue } from '../../../utils/helper';
 import { MAX_PROBLEM_IO_SIZE, SINGLE_CODE_LIMIT_BYTES, STORAGE_LIMIT_BYTES } from '../../../data/constants';
 
@@ -52,7 +52,7 @@ export const saveCodeForSlug = async (
     }
 };
 
-export const saveTestCaseForSlug = async (slug: string, testCasesToSave: TestCase[]) => {
+export const saveTestCaseForSlug = async (slug: string, testCasesToSave: TestCaseArray) => {
     const testCaseMap = getTestCaseMap();
     const testCaseQueue = getTestCaseQueue();
 
