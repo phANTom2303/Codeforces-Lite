@@ -27,6 +27,7 @@ const extractTestCases = async (tab) => {
                         Testcase: caseNumber++,
                         Input: inputValue,
                         ExpectedOutput: outputValue,
+                        Output: "",
                     });
                 });
             });

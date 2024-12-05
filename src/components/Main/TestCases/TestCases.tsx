@@ -9,14 +9,8 @@ const TestCases = () => {
     const [selectedTab, setSelectedTab] = useState<number>(0);
     const apiKey = useCFStore((state) => state.apiKey);
     const currentSlug = useCFStore((state) => state.currentSlug);
-    const results = useCFStore((state) => state.results);
-    const setResults = useCFStore((state) => state.setResults);
     const testCases = useCFStore((state) => state.testCases);
-    const timeAndMemory = useCFStore((state) => state.timeAndMemory);
-    const setTimeAndMemory = useCFStore((state) => state.setTimeAndMemory);
     const setTestCases = useCFStore((state) => state.setTestCases);
-    const errorMessage = useCFStore((state) => state.errorMessage);
-    const setErrorMessage = useCFStore((state) => state.setErrorMessage);
     const isRunning = useCFStore((state) => state.isRunning);
     const [copied, setCopied] = useState<{ input: boolean, expectedOutput: boolean, output: boolean }>({ input: false, expectedOutput: false, output: false });
 
@@ -32,15 +26,13 @@ const TestCases = () => {
             outputRef.current.style.height = 'auto';
             outputRef.current.style.height = outputRef.current.scrollHeight + 'px';
         }
-    }, [currentSlug ,testCases, selectedTab]);
+    }, [currentSlug, testCases, selectedTab]);
 
     const isAllTestCasesPassed = () => {
-        if (!results || results.length === 0 || testCases.length === 0 || results.length !== testCases.length) {
-            return false;
-        }
-        return testCases.length > 0 && testCases.every((testCase, index) =>
-            testCase.ExpectedOutput.trim() === results[index].trim()
-        );
+        if (!testCases.testCases[selectedTab]?.Output) return false;
+        return testCases.testCases.length > 0 && testCases.testCases.every((testCase) =>
+            testCase.ExpectedOutput?.trim() === testCase.Output?.trim()
+        )
     };
 
     const getStatusMessage = () => {
@@ -48,30 +40,30 @@ const TestCases = () => {
             return (
                 <div className="flex items-center gap-2">
                     <div className="text-base font-medium text-green-500">Accepted</div>
-                    {timeAndMemory[selectedTab] && (
+                    {testCases.testCases[selectedTab]?.TimeAndMemory && (
                         <div className="text-xs text-gray-500">
-                            Used: {timeAndMemory[selectedTab].time}ms, {timeAndMemory[selectedTab].memory}KB
+                            Used: {testCases.testCases[selectedTab]?.TimeAndMemory?.Time}ms, {testCases.testCases[selectedTab]?.TimeAndMemory?.Memory}KB
                         </div>
                     )}
                 </div>
             );
-        } else if (errorMessage) {
+        } else if (testCases.ErrorMessage) {
             return (
                 <div className="text-base font-medium text-red-500">
-                    {errorMessage.includes('Compilation Error') ? 'Compilation Error' :
-                        errorMessage.includes('Time Limit') ? 'Time Limit Exceeded' :
-                            errorMessage.includes('Memory Limit') ? 'Memory Limit Exceeded' :
-                                errorMessage.includes('Runtime Error') ? 'Runtime Error' :
+                    {testCases.ErrorMessage.includes('Compilation Error') ? 'Compilation Error' :
+                        testCases.ErrorMessage.includes('Time Limit') ? 'Time Limit Exceeded' :
+                            testCases.ErrorMessage.includes('Memory Limit') ? 'Memory Limit Exceeded' :
+                                testCases.ErrorMessage.includes('Runtime Error') ? 'Runtime Error' :
                                     'Wrong Answer'}
                 </div>
             );
-        } else if (results.length > 0) {
+        } else if (testCases.testCases[selectedTab]?.Output) {
             return (
                 <div className="flex items-center gap-2">
                     <div className="text-base font-medium text-red-500">Wrong Answer</div>
-                    {timeAndMemory[selectedTab] && (
+                    {testCases.testCases[selectedTab].TimeAndMemory && (
                         <div className="text-xs text-gray-500">
-                            Used: {timeAndMemory[selectedTab].time}ms, {timeAndMemory[selectedTab].memory}KB
+                            Used: {testCases.testCases[selectedTab].TimeAndMemory?.Time}ms, {testCases.testCases[selectedTab].TimeAndMemory?.Memory}KB
                         </div>
                     )}
                 </div>
@@ -88,8 +80,8 @@ const TestCases = () => {
             : 'bg-transparent';
 
         let borderStyle = 'border-transparent';
-        if (results[index]) {
-            borderStyle = results[index].trim() === testCases[index].ExpectedOutput.trim()
+        if (testCases?.testCases?.[index]?.Output) {
+            borderStyle = testCases.testCases[index].Output.trim() === testCases.testCases[index].ExpectedOutput.trim()
                 ? 'border-green-500'
                 : 'border-red-500';
         }
@@ -104,56 +96,48 @@ const TestCases = () => {
     };
 
     useEffect(() => {
-        if (selectedTab >= testCases.length) {
-            setSelectedTab(Math.max(0, testCases.length - 1));
+        if (selectedTab >= testCases.testCases.length) {
+            setSelectedTab(Math.max(0, testCases.testCases.length - 1));
         }
-    }, [testCases.length]);
+    }, [testCases.testCases.length]);
 
     const handleInputChange = (index: number, newInput: string) => {
         if (isRunning) return;
-        const updatedTestCases = [...testCases];
+        const updatedTestCases = [...testCases.testCases];
         updatedTestCases[index].Input = newInput;
-        setTestCases(updatedTestCases);
+        setTestCases({ testCases: updatedTestCases });
     };
 
     const handleExpectedOutputChange = (index: number, newOutput: string) => {
         if (isRunning) return;
-        const updatedTestCases = [...testCases];
+        const updatedTestCases = [...testCases.testCases];
         updatedTestCases[index].ExpectedOutput = newOutput;
-        setTestCases(updatedTestCases);
+        setTestCases({ testCases: updatedTestCases });
     };
 
     const addTestCase = () => {
-        if (testCases.length < MAX_TEST_CASES) {
+        if (testCases.testCases.length < MAX_TEST_CASES) {
             const newTestCase: TestCase = {
                 Input: '', ExpectedOutput: '',
-                Testcase: testCases.length + 1
+                Testcase: testCases.testCases.length + 1,
+                TimeAndMemory: { Time: '', Memory: '' },
+                Output: ''
             };
-            setTestCases([...testCases, newTestCase]);
-            setSelectedTab(testCases.length);
+            
+            setTestCases({ testCases: [...testCases.testCases.map(testCase => ({ ...testCase, Output: '' })), newTestCase], ErrorMessage: '' });            setSelectedTab(testCases.testCases.length);
         }
     };
 
     const removeTestCase = (index: number) => {
-        const updatedTestCases = testCases.filter((_, i) => i !== index);
-        setTestCases(updatedTestCases);
+        const updatedTestCases = testCases.testCases.filter((_, i) => i !== index);
+        setTestCases({ testCases: updatedTestCases });
 
         setSelectedTab((prev) => Math.max(0, prev > index ? prev - 1 : prev));
-        // remove results for the removed test case
-        const updatedResults = results.filter((_, i) => i !== index);
-        setResults(updatedResults);
-
-        // remove time and memory for the removed test case
-        const updatedTimeAndMemory = timeAndMemory.filter((_, i) => i !== index);
-        setTimeAndMemory(updatedTimeAndMemory);
     };
 
     const resetTestCases = () => {
         chrome.runtime.sendMessage({ requestTestCases: true });
-        setResults([]);
-        setTimeAndMemory([]);
         setSelectedTab(0);
-        setErrorMessage('');
     };
 
     return (
@@ -182,9 +166,9 @@ const TestCases = () => {
                                 </button>
                                 <button
                                     onClick={addTestCase}
-                                    className={`text-gray-500 hover:text-gray-600 ${testCases.length >= MAX_TEST_CASES || isRunning ? "cursor-not-allowed opacity-50" : ""
+                                    className={`text-gray-500 hover:text-gray-600 ${testCases.testCases.length >= MAX_TEST_CASES || isRunning ? "cursor-not-allowed opacity-50" : ""
                                         }`}
-                                    disabled={testCases.length >= MAX_TEST_CASES || isRunning}
+                                    disabled={testCases.testCases.length >= MAX_TEST_CASES || isRunning}
                                     title="Add test case"
                                 >
                                     <Plus size={20} />
@@ -194,17 +178,17 @@ const TestCases = () => {
                         {getStatusMessage()}
                     </div>
 
-                    {errorMessage ? (
+                    {testCases.ErrorMessage ? (
                         <div className='mt-3'>
                             <div className="relative">
-                                <div className={`p-2 rounded-md whitespace-pre-wrap ${results[selectedTab]?.trim() === testCases[selectedTab]?.ExpectedOutput.trim()
+                                <div className={`p-2 rounded-md whitespace-pre-wrap ${testCases.testCases[selectedTab]?.Output?.trim() === testCases.testCases[selectedTab]?.ExpectedOutput.trim()
                                     ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
                                     : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
                                     }`}>
-                                    {results[selectedTab]}
+                                    {testCases.testCases[selectedTab]?.Output}
                                 </div>
                                 <button
-                                    onClick={() => handleCopy(results[selectedTab], 'output')}
+                                    onClick={() => handleCopy(testCases.testCases[selectedTab]?.Output || '', 'output')}
                                     className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
                                 >
                                     {copied.output ? <Check size={16} /> : <Copy size={16} />}
@@ -214,7 +198,7 @@ const TestCases = () => {
                     ) : (
                         <>
                             <div className="flex gap-2 mb-2 pr-3 py-3 overflow-x-auto whitespace-nowrap">
-                                {testCases.map((_, index) => (
+                                {testCases.testCases.map((_, index) => (
                                     <div key={index} className="relative group">
                                         <button
                                             onClick={() => setSelectedTab(index)}
@@ -233,7 +217,7 @@ const TestCases = () => {
                                 ))}
                             </div>
 
-                            {testCases.length > 0 && selectedTab < testCases.length && (
+                            {testCases.testCases.length > 0 && selectedTab < testCases.testCases.length && (
                                 <div className="flex flex-col p-2">
                                     <div>
                                         <div className="relative">
@@ -241,13 +225,13 @@ const TestCases = () => {
                                                 <h2 className="text-base font-[600] pb-1">Input</h2>
                                                 <textarea
                                                     ref={inputRef}
-                                                    value={testCases[selectedTab].Input}
+                                                    value={testCases.testCases[selectedTab].Input}
                                                     onChange={(e) => handleInputChange(selectedTab, e.target.value)}
                                                     className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors duration-200"
                                                 />
                                             </label>
                                             <button
-                                                onClick={() => handleCopy(testCases[selectedTab].Input, 'input')}
+                                                onClick={() => handleCopy(testCases.testCases[selectedTab].Input, 'input')}
                                                 className="absolute top-8 right-2 text-gray-400 hover:text-gray-600"
                                             >
                                                 {copied.input ? <Check size={16} /> : <Copy size={16} />}
@@ -259,13 +243,13 @@ const TestCases = () => {
                                                 <h2 className="text-base font-[600] pb-1">Expected Output</h2>
                                                 <textarea
                                                     ref={outputRef}
-                                                    value={testCases[selectedTab].ExpectedOutput}
+                                                    value={testCases.testCases[selectedTab].ExpectedOutput}
                                                     onChange={(e) => handleExpectedOutputChange(selectedTab, e.target.value)}
                                                     className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors duration-200"
                                                 />
                                             </label>
                                             <button
-                                                onClick={() => handleCopy(testCases[selectedTab].ExpectedOutput, 'expectedOutput')}
+                                                onClick={() => handleCopy(testCases.testCases[selectedTab].ExpectedOutput, 'expectedOutput')}
                                                 className="absolute top-8 right-2 text-gray-400 hover:text-gray-600"
                                             >
                                                 {copied.expectedOutput ? <Check size={16} /> : <Copy size={16} />}
@@ -273,19 +257,19 @@ const TestCases = () => {
                                         </div>
                                     </div>
 
-                                    {results[selectedTab] && (
+                                    {testCases.testCases.length > 0 && testCases.testCases[selectedTab]?.Output && (
                                         <div className="mt-4">
                                             <h2 className="text-base font-[600] pb-1 text-zinc-500">Output</h2>
                                             <div className="relative">  {/* Add this wrapper div */}
-                                                <div className={`p-2 rounded-md whitespace-pre-wrap ${results[selectedTab].trim() === testCases[selectedTab].ExpectedOutput.trim()
+                                                <div className={`p-2 rounded-md whitespace-pre-wrap ${testCases.testCases[selectedTab]?.Output.trim() === testCases.testCases[selectedTab].ExpectedOutput.trim()
                                                     ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
                                                     : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
                                                     }`}>
-                                                    {results[selectedTab]}
+                                                    {testCases.testCases[selectedTab]?.Output}
                                                 </div>
 
                                                 <button
-                                                    onClick={() => handleCopy(results[selectedTab], 'output')}
+                                                    onClick={() => handleCopy(testCases.testCases[selectedTab]?.Output || '', 'output')}
                                                     className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
                                                 >
                                                     {copied.output ? <Check size={16} /> : <Copy size={16} />}

@@ -14,6 +14,7 @@ import { handleSubmission } from './services/submissionService';
 import { initializeStorage } from './services/storageService';
 import { loadCodeWithCursor } from './utils/codeHandlers';
 import { accessRestrictionMessage } from './utils/constants';
+import ApiLimitAlert from '../popups/ApiLimitAlert';
 
 interface MainProps {
     setShowOptions: (show: boolean) => void;
@@ -38,7 +39,7 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
     } = useCFStore();
 
     // Custom hooks
-    const { runCode } = useCodeExecution(editor);
+    const { runCode, showApiLimitAlert, setShowApiLimitAlert } = useCodeExecution(editor);
     const { handleResetCode, handleLanguageChange, handleFontSizeChange, handleRedirectToLatestSubmission } = useCodeManagement(editor);
     const { loadTestCases, setupTestCaseListener } = useTestCases();
     const { handleTabEvents } = useTabEvents();
@@ -121,6 +122,10 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
     }, [currentSlug, testCases]);
     return (
         <div className='flex flex-col w-full justify-start items-center h-full dark:bg-[#111111]'>
+            <ApiLimitAlert 
+            isOpen={showApiLimitAlert} 
+            setIsOpen={setShowApiLimitAlert}
+        />
             <TopBar
                 theme={theme as "light" | "dark"}
                 handleClick={() => handleSubmission(editor, setIsSubmitting)}
@@ -135,7 +140,7 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
                 isRunning={isRunning}
                 isSubmitting={isSubmitting}
                 runCode={runCode}
-                testCases={testCases}
+                testCases={testCases.testCases}
             />
 
             <div className="w-full h-[calc(100vh-88px)]">

@@ -1,6 +1,7 @@
 import { useCFStore } from '../../../zustand/useCFStore';
 import { adjustCodeForJudge0 } from '../../../utils/codeAdjustments';
 import { EXECUTE_CODE_LIMIT } from '../../../data/constants';
+import { useState } from 'react';
 
 const languageMap: { [key: string]: number } = {
     'java': 62,
@@ -29,7 +30,7 @@ export const executionState = {
 };
 
 // Status handler
-const handleExecutionStatus = (result: any, setErrorMessage: any) => {
+const handleExecutionStatus = (result: any, testCase: any) => {
     const statusHandlers: any = {
         2: { message: 'Runtime Error', getOutput: () => result.description ? decodeURIComponent(escape(atob(result.description))) : 'In queue' },
         3: { message: null, getOutput: () => result.stdout ? decodeURIComponent(escape(atob(result.stdout))) : 'No output' },
@@ -41,11 +42,11 @@ const handleExecutionStatus = (result: any, setErrorMessage: any) => {
         9: { message: 'Output Limit Exceeded', getOutput: () => 'Output Limit Exceeded' },
         10: { message: 'Runtime Error', getOutput: () => `Runtime Error: ${result.stderr ? decodeURIComponent(escape(atob(result.stderr))).trim() : 'Runtime Error'}` },
         11: { message: 'Runtime Error', getOutput: () => decodeURIComponent(escape(atob(result.stderr))).trim() || 'Runtime Error' },
-        12: { message: 'Execution Timed Out', getOutput: () => 'Execution Timed Out' }
+        12: { message: 'Execution Timed Out', getOutput: () => 'Execution Timed Out' },
     };
 
     const handler = statusHandlers[result.status_id] || { message: 'Runtime Error', getOutput: () => result.stderr ? decodeURIComponent(escape(atob(result.stderr))).trim() : 'Something went wrong' };
-    setErrorMessage(handler.message);
+    testCase.ErrorMessage = handler.message;
     return handler.getOutput();
 };
 
@@ -53,25 +54,21 @@ const handleExecutionStatus = (result: any, setErrorMessage: any) => {
 const getTimeAndMemory = (result: any) => {
     if (result.status_id === 3) {
         return {
-            time: result.time || '0',
-            memory: (result.memory / 1024).toFixed(2) || '0'
+            Time: result.time || '0',
+            Memory: (result.memory / 1024).toFixed(2) || '0'
         };
     }
-    return { time: '0', memory: '0' };
+    return { Time: '0', Memory: '0' };
 };
 
 export const useCodeExecution = (editor: React.RefObject<any>) => {
     const language = useCFStore(state => state.language);
     const testCases = useCFStore(state => state.testCases);
-    const setResults = useCFStore(state => state.setResults);
-    const setErrorMessage = useCFStore(state => state.setErrorMessage);
     const setIsRunning = useCFStore(state => state.setIsRunning);
-    const setTimeAndMemory = useCFStore(state => state.setTimeAndMemory);
+    const [showApiLimitAlert, setShowApiLimitAlert] = useState(false);
 
     const resetStates = () => {
-        setResults([]);
-        setTimeAndMemory([]);
-        setErrorMessage(null);
+        setIsRunning(false);
     };
 
     const setCatchError = (error: any) => {
@@ -79,8 +76,9 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
             resetStates();
             return;
         }
-        setErrorMessage('Execution failed. Please try again.');
-        setResults(Array(testCases.length).fill('Execution failed. Please try again.'));
+        testCases.testCases.forEach((testCase: any) => {
+            testCase.Output = 'Execution failed. Please try again.';
+        });
     }
 
     const createSubmissionPayload = (code: string, input: string) => ({
@@ -93,57 +91,19 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
     const processResults = async (tokens: string[], apiKey: string) => {
         const controller = executionState.startNew();
         await new Promise((resolve, reject) => {
-            const timeout = setTimeout(resolve, (language === 'kotlin' ? 6000 : EXECUTE_CODE_LIMIT) * testCases.length);
+            const timeout = setTimeout(resolve, (language === 'kotlin' ? 6000 : EXECUTE_CODE_LIMIT) * testCases.testCases.length);
             controller.signal.addEventListener('abort', () => {
                 clearTimeout(timeout);
                 reject(new DOMException('Aborted', 'AbortError'));
             });
         });
 
-        if (testCases.length > 1) {
-            const resultsResponse = await makeJudge0CERequest(
-                `submissions/batch?base64_encoded=true&tokens=${tokens.join(',')}&fields=stdout,stderr,status,compile_output,status_id,time,memory`,
-                { method: 'GET' },
-                apiKey
-            );
-            return resultsResponse.json();
-        } else {
-            const resultsResponse = await makeJudge029Request(
-                `submissions/${tokens}?base64_encoded=true&fields=*`,
-                { method: 'GET' },
-                apiKey
-            );
-            return resultsResponse.json();
-        }
-    };
-
-
-    const processResultsAlternate = async (tokens: string[], apiKey: string) => {
-        const controller = executionState.startNew();
-        await new Promise((resolve, reject) => {
-            const timeout = setTimeout(resolve, (language === 'kotlin' ? 6000 : EXECUTE_CODE_LIMIT) * testCases.length);
-            controller.signal.addEventListener('abort', () => {
-                clearTimeout(timeout);
-                reject(new DOMException('Aborted', 'AbortError'));
-            });
-        });
-
-        if (testCases.length > 1) {
-            const resultsResponse = await makeJudge029Request(
-                `submissions/${tokens}?base64_encoded=true&fields=*`,
-                { method: 'GET' },
-                apiKey
-            );
-            return resultsResponse.json();
-
-        } else {
-            const resultsResponse = await makeJudge0CERequest(
-                `submissions/batch?base64_encoded=true&tokens=${tokens.join(',')}&fields=stdout,stderr,status,compile_output,status_id,time,memory`,
-                { method: 'GET' },
-                apiKey
-            );
-            return resultsResponse.json();
-        }
+        const resultsResponse = await makeJudge0CERequest(
+            `submissions/batch?base64_encoded=true&tokens=${tokens.join(',')}&fields=stdout,stderr,status,compile_output,status_id,time,memory`,
+            { method: 'GET' },
+            apiKey
+        );
+        return resultsResponse.json();
     };
 
     // Unified API handlers
@@ -160,21 +120,8 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
         });
     };
 
-    const makeJudge029Request = async (endpoint: string, options: any, apiKey: string) => {
-        const controller = executionState.startNew();
-        return fetch(`https://judge0-ce.p.sulu.sh/${endpoint}`, {
-            ...options,
-            headers: {
-                'Accept': 'application/json',
-                ...options.headers,
-                'Authorization': `Bearer ${apiKey}`
-            },
-            signal: controller.signal
-        });
-    };
-
     const executeCodeCE = async (code: string, apiKey: string) => {
-        const submissions = testCases.map(testCase => createSubmissionPayload(code, testCase.Input));
+        const submissions = testCases.testCases.map(testCase => createSubmissionPayload(code, testCase.Input));
 
         try {
             const submitResponse = await makeJudge0CERequest('submissions/batch?base64_encoded=true', {
@@ -184,7 +131,7 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
             }, apiKey);
 
             if (submitResponse.status === 429) {
-                await executeJudge0ForCE(code, apiKey);
+                setShowApiLimitAlert(true);
                 return;
             }
 
@@ -192,8 +139,10 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
 
             if (!batchResponse || !Array.isArray(batchResponse)) {
                 const errorDetail = batchResponse?.error || 'Unknown error';
-                setErrorMessage(`Compilation Error`);
-                setResults(Array(testCases.length).fill(errorDetail));
+                testCases.ErrorMessage = `Compilation Error`;
+                testCases.testCases.forEach((testCase: any) => {
+                    testCase.Output = errorDetail;
+                });
                 return;
             }
 
@@ -201,14 +150,16 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
             let results = await processResults(tokens, apiKey);
 
             if (!results?.submissions) {
-                setErrorMessage(`Compilation Error`);
+                testCases.ErrorMessage = `Compilation Error`;
                 const errorDetail = decodeURIComponent(escape(atob(results?.error))) || 'Compilation Error';
-                setResults(Array(testCases.length).fill(errorDetail));
+                testCases.testCases.forEach((testCase: any) => {
+                    testCase.Output = errorDetail;
+                });
                 return;
             }
 
             const outputResults: string[] = [];
-            const timeMemoryResults: { time: string; memory: string }[] = [];
+            const timeMemoryResults: { Time: string; Memory: string }[] = [];
 
             for (const result of results.submissions) {
                 if (!result) continue;
@@ -219,163 +170,22 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
                 }
 
                 timeMemoryResults.push(getTimeAndMemory(result));
-                outputResults.push(handleExecutionStatus(result, setErrorMessage));
+                outputResults.push(handleExecutionStatus(result, testCases));
             }
 
-            setResults(outputResults);
-            setTimeAndMemory(timeMemoryResults);
+            testCases.testCases.forEach((testCase: any, index: number) => {
+                testCase.Output = outputResults[index];
+                testCase.TimeAndMemory = timeMemoryResults[index];
+            });
         } catch (error: any) {
             setCatchError(error);
         }
     };
 
-    const executeCodeCEForJudge0 = async (code: string, apiKey: string) => {
-        const submissions = testCases.map(testCase => createSubmissionPayload(code, testCase.Input));
-
-        try {
-            const submitResponse = await makeJudge0CERequest('submissions/batch?base64_encoded=true', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ submissions })
-            }, apiKey);
-
-            if (submitResponse.status === 429) {
-                setErrorMessage('Rate limit exceeded');
-                setResults(['API rate limit exceeded.']);
-                return;
-            }
-
-            const batchResponse = await submitResponse.json();
-
-            if (!batchResponse || !Array.isArray(batchResponse)) {
-                const errorDetail = batchResponse?.error || 'Unknown error';
-                setErrorMessage(`Compilation Error`);
-                setResults([errorDetail.repeat(testCases.length)]);
-                return;
-            }
-
-            const tokens = batchResponse.map(submission => submission.token);
-            let results = await processResultsAlternate(tokens, apiKey);
-
-            if (!results?.submissions) {
-                setErrorMessage(`Compilation Error`);
-                setResults([decodeURIComponent(escape(atob(results?.error))) || 'Compilation Error']);
-                return;
-            }
-
-            const outputResults: string[] = [];
-            const timeMemoryResults: { time: string; memory: string }[] = [];
-
-            for (const result of results.submissions) {
-                if (!result) continue;
-
-                if (result?.status_id === 2) {
-                    await new Promise(resolve => setTimeout(resolve, 3000));
-                    results = await processResultsAlternate(tokens, apiKey);
-                }
-
-                timeMemoryResults.push(getTimeAndMemory(result));
-                outputResults.push(handleExecutionStatus(result, setErrorMessage));
-            }
-
-            setResults(outputResults);
-            setTimeAndMemory(timeMemoryResults);
-        } catch (error: any) {
-            setCatchError(error);
-        }
-    };
-
-    const executeJudge0 = async (code: string, apiKey: string) => {
-        try {
-            const submitResponse = await makeJudge029Request('submissions?base64_encoded=true&fields=*', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(createSubmissionPayload(code, testCases[0].Input)),
-            }, apiKey);
-
-            if (submitResponse.status === 429) {
-                await executeCodeCEForJudge0(code, apiKey);
-                return;
-            }
-
-            const submission = await submitResponse.json();
-            if (!submission.token) {
-                setErrorMessage('Something went wrong');
-                setResults(['Something went wrong']);
-                return;
-            }
-
-            let result = await processResults(submission.token, apiKey);
-
-            if (result?.status_id === 2) {
-                await new Promise(resolve => setTimeout(resolve, 3000));
-                result = await processResults(submission.token, apiKey);
-            }
-
-            const outputResults: string[] = [];
-            const timeMemoryResults: { time: string; memory: string }[] = [];
-
-            timeMemoryResults.push(getTimeAndMemory(result));
-            outputResults.push(handleExecutionStatus(result, setErrorMessage));
-
-            setResults(outputResults);
-            setTimeAndMemory(timeMemoryResults);
-
-        } catch (error: any) {
-            setCatchError(error);
-        }
-    };
-
-    const executeJudge0ForCE = async (code: string, apiKey: string) => {
-        const timeMemoryResults: { time: string, memory: string }[] = [];
-        const outputResults: string[] = [];
-
-        try {
-            for (const testCase of testCases) {
-                const submitResponse = await makeJudge029Request('submissions?base64_encoded=true&fields=*', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(createSubmissionPayload(code, testCase.Input))
-                }, apiKey);
-
-                if (submitResponse.status === 429) {
-                    setErrorMessage('Rate limit exceeded.');
-                    outputResults.push('API rate limit exceeded.');
-                    continue;
-                }
-
-                const submission = await submitResponse.json();
-
-                if (!submission.token) {
-                    setErrorMessage('Something went wrong.');
-                    outputResults.push('Something went wrong.');
-                    continue;
-                }
-                let result = await processResultsAlternate(submission.token, apiKey);
-
-                if (result?.status_id === 2) {
-                    await new Promise(resolve => setTimeout(resolve, 3000));
-                    result = await processResultsAlternate(submission.token, apiKey);
-                }
-
-                timeMemoryResults.push(getTimeAndMemory(result));
-                outputResults.push(handleExecutionStatus(result, setErrorMessage));
-            }
-
-            setResults(outputResults);
-            setTimeAndMemory(timeMemoryResults);
-        } catch (error: any) {
-            setCatchError(error);
-        }
-    };
 
     const executeCode = async (code: string, apiKey: string) => {
         try {
-            if (testCases.length > 1) {
-                await executeCodeCE(code, apiKey);
-            } else {
-                await executeJudge0(code, apiKey);
-            }
+            await executeCodeCE(code, apiKey);
         } catch (error: any) {
             setCatchError(error);
         }
@@ -383,15 +193,13 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
 
     const runCode = async () => {
         setIsRunning(true);
-        setResults([]);
-        setErrorMessage(null);
-        setTimeAndMemory([]);
+        testCases.ErrorMessage = '';
 
         const code = editor.current?.view?.state.doc.toString();
         const apiKey = localStorage.getItem('judge0ApiKey');
 
         if (!code || !apiKey) {
-            setErrorMessage("No code provided or API key missing");
+            testCases.ErrorMessage = 'No code provided or API key missing';
             setIsRunning(false);
             return;
         }
@@ -401,5 +209,9 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
         setIsRunning(false);
     };
 
-    return { runCode };
+    return {
+        runCode,
+        showApiLimitAlert,
+        setShowApiLimitAlert
+    };
 };

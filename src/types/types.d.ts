@@ -79,6 +79,15 @@ export interface TestCase {
   Testcase: number;
   Input: string;
   ExpectedOutput: string;
+  Output: string;
+  TimeAndMemory: {
+    Time: string;
+    Memory: string;
+  };
 }
 
-export type TestCaseArray = TestCase[];
+
+export type TestCaseArray = {
+  testCases: TestCase[];
+  ErrorMessage?: string;
+};
