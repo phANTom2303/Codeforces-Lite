@@ -112,8 +112,7 @@ This comprehensive system combines coding, testing, and submission in one seamle
 You have been provided with $10 of free credit in the Judge0CE Sulu API Key.
 
 This allows you to execute up to:
-  - 20,000 test cases, or
-  - 10,000 code execution requests.
+  - 20,000 APi requests
 
 Once your API key's limit is reached, please consider:
   1. Upgrading your plan to continue using the API.
