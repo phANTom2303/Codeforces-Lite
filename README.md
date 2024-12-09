@@ -93,29 +93,32 @@ This comprehensive system combines coding, testing, and submission in one seamle
 
 #### To use the run code feature, you'll need to set up an API key. Follow these steps:
 
-#### NOTE: If you have already subscribed to Judge0 and want to access the API key, go to the link below and click on `Get a Submission` in the left-side panel. You will then be redirected to a page where you can access the API key, as shown in Point 5 below. Please note that both Judge0 and Judge0 CE are required.
+1. Visit [Sulu > Consumer Dashboard](https://platform.sulu.sh/portal/consumer/dashboard?period=7_days)
 
-1. Visit [Judge0 on RapidAPI](https://rapidapi.com/dishis-technologies-judge0/api/judge029) and [Judge0 CE on RapidAPI](https://rapidapi.com/judge0-official/api/judge0-ce)
-
-2. Sign up or log in to RapidAPI
-3. Subscribe to both Judge0 and Judge0 CE (free tier available)
+2. Sign up or log in to Sulu
+3. Under Authentication, you will see live key, copy it
 
    ![Subscribe](/public/assets/images/api-guide1.png)
-    
-    Repeat the same steps for `judge0-CE`.
-
-4. Once subscribed, you'll find your API key in the "Header Parameters" section
-5. Copy the `X-RapidAPI-Key` value
-   
-   ![Copy API Key](/public/assets/images/api-guide2.png)
 
 5. Open Codeforces Lite extension and go to "API Settings" section
-6. Click the "Edit" button and paste one of your API keys (because both APIs are same value, you can use any one of them)
+6. Click the "Edit" button and paste your API key
 
    ![Paste API Key](/public/assets/images/api-guide3.png)
 7. Save the key to enable the run code feature
 
 🚀 You're all set! The code execution feature is now ready to use.
+
+```
+You have been provided with $10 of free credit in the Judge0CE Sulu API Key.
+
+This allows you to execute up to:
+  - 20,000 test cases, or
+  - 10,000 code execution requests.
+
+Once your API key's limit is reached, please consider:
+  1. Upgrading your plan to continue using the API.
+  2. Creating a new API key using an alternate account for additional free credits.
+```
 
 ---
 
