@@ -1,9 +1,9 @@
 import ReactCodeMirror, { EditorState, EditorView, ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import { indentUnit } from '@codemirror/language';
 import { githubDark, githubLight } from '@uiw/codemirror-theme-github';
-import { getLanguageExtension } from "../../utils/helper";
+import { getLanguageExtension } from "../../../utils/helper";
 import { forwardRef } from "react";
-import { CodeEditorProps } from "../../types/types";
+import { CodeEditorProps } from "../../../types/types";
 
 const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
     ({ theme, language, fontSize, tabIndent, currentSlug }, editorRef) => {

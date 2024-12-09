@@ -1,6 +1,6 @@
-import { CodeEntry, TestCaseArray } from '../../../types/types';
-import { getCodeMap, getSlugQueue, getTestCaseMap, getTestCaseQueue } from '../../../utils/helper';
-import { MAX_PROBLEM_IO_SIZE, SINGLE_CODE_LIMIT_BYTES, STORAGE_LIMIT_BYTES } from '../../../data/constants';
+import { CodeEntry, TestCaseArray } from '../../types/types';
+import { getCodeMap, getSlugQueue, getTestCaseMap, getTestCaseQueue } from '../helper';
+import { MAX_PROBLEM_IO_SIZE, SINGLE_CODE_LIMIT_BYTES, STORAGE_LIMIT_BYTES } from '../../data/constants';
 
 export const saveCodeForSlug = async (
     slug: string, 

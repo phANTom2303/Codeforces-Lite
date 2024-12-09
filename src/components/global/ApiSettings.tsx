@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Check, Edit2, Trash2, Key, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
-import { useCFStore } from '../zustand/useCFStore';
+import { useCFStore } from '../../zustand/useCFStore';
 
 const ApiSettings: React.FC = () => {
     const apiKey = useCFStore((state) => state.apiKey);
@@ -23,7 +23,7 @@ const ApiSettings: React.FC = () => {
             });
 
             if (response.ok) {
-                localStorage.setItem('judge0ApiKey', tempKey);
+                localStorage.setItem('judge0CEApiKey', tempKey);
                 setApiKey(tempKey);
                 setIsEditing(false);
                 setTempKey('');
@@ -37,7 +37,7 @@ const ApiSettings: React.FC = () => {
     };
 
     const deleteKey = () => {
-        localStorage.removeItem('judge0ApiKey');
+        localStorage.removeItem('judge0CEApiKey');
         setApiKey('');
         toast.success('API key removed');
     };

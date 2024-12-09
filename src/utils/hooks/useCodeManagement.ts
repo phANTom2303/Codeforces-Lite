@@ -1,7 +1,7 @@
 
-import { useCFStore } from '../../../zustand/useCFStore';
-import { getValueFromLanguage } from '../../../utils/helper';
-import { loadCodeWithCursor } from '../utils/codeHandlers';
+import { useCFStore } from '../../zustand/useCFStore';
+import { getValueFromLanguage } from '../helper';
+import { loadCodeWithCursor } from '../codeHandlers';
 
 export const useCodeManagement = (editor: React.RefObject<any>) => {
     const setLanguage = useCFStore(state => state.setLanguage);

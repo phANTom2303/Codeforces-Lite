@@ -31,7 +31,7 @@ export const useCFStore = create<CFStoreInterface>((set) => ({
     testCases: {ErrorMessage: '', testCases: []},
     isRunning: false,
     isSubmitting: false,
-    apiKey: localStorage.getItem('judge0ApiKey') || '',
+    apiKey: localStorage.getItem('judge0CEApiKey') || '',
 
     // Actions
     setLanguage: (language) => set({ language }),

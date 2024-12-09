@@ -5,12 +5,12 @@ import { useEffect, useRef, useState } from "react";
 import { indentUnit } from "@codemirror/language";
 import { SettingsProps } from "../../types/types";
 import { Toaster } from "sonner";
-import Footer from "../Footer";
+import Footer from "../global/Footer";
 import CodeMirror from '@uiw/react-codemirror';
-import DeleteCodesConfirmationPopup from "../popups/DeleteCodesConfirmationPopup";
-import SettingsTopBar from "./UI/SettingsTopBar";
-import Options from './UI/Options';
-import ApiSettings from '../ApiSettings';
+import DeleteCodesConfirmationPopup from "../global/popups/DeleteCodesConfirmationPopup";
+import SettingsTopBar from "./ui/SettingsTopBar";
+import Options from './ui/Options';
+import ApiSettings from '../global/ApiSettings';
 
 
 const Settings: React.FC<SettingsProps> = ({ setShowOptions, theme, setTheme, tabIndent, setTabIndent }) => {

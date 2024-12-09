@@ -1,6 +1,6 @@
-import { useCFStore } from '../../../zustand/useCFStore';
-import { getTestCaseMap } from '../../../utils/helper';
-import { TestCaseArray } from '../../../types/types';
+import { useCFStore } from '../../zustand/useCFStore';
+import { getTestCaseMap } from '../helper';
+import { TestCaseArray } from '../../types/types';
 
 export const useTestCases = () => {
     const setTestCases = useCFStore(state => state.setTestCases);

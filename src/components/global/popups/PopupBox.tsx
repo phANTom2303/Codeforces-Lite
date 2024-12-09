@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { PopupBoxProps } from "../../types/types";
+import { PopupBoxProps } from "../../../types/types";
 
 const PopupBox = ({
   isOpen,

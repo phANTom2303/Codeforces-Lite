@@ -1,6 +1,6 @@
-import { useCFStore } from '../../../zustand/useCFStore';
-import { adjustCodeForJudge0 } from '../../../utils/codeAdjustments';
-import { EXECUTE_CODE_LIMIT } from '../../../data/constants';
+import { useCFStore } from '../../zustand/useCFStore';
+import { adjustCodeForJudge0 } from '../codeAdjustments';
+import { EXECUTE_CODE_LIMIT } from '../../data/constants';
 import { useState } from 'react';
 
 const languageMap: { [key: string]: number } = {
@@ -194,9 +194,13 @@ export const useCodeExecution = (editor: React.RefObject<any>) => {
     const runCode = async () => {
         setIsRunning(true);
         testCases.ErrorMessage = '';
+        testCases.testCases.forEach((testCase: any) => {
+            testCase.Output = '';
+            testCase.TimeAndMemory = { Time: '0', Memory: '0' };
+        });
 
         const code = editor.current?.view?.state.doc.toString();
-        const apiKey = localStorage.getItem('judge0ApiKey');
+        const apiKey = localStorage.getItem('judge0CEApiKey');
 
         if (!code || !apiKey) {
             testCases.ErrorMessage = 'No code provided or API key missing';

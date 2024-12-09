@@ -1,8 +1,8 @@
 import { Braces, CloudUpload, Code2, LoaderCircle, Play, RotateCcw, Settings } from 'lucide-react';
-import { TopBarProps } from '../../types/types';
+import { TopBarProps } from '../../../types/types';
 import { useState } from 'react';
 import Timer from './CodeTimer';
-import { useCFStore } from '../../zustand/useCFStore';
+import { useCFStore } from '../../../zustand/useCFStore';
 
 const TopBar: React.FC<TopBarProps> = ({
     theme,
