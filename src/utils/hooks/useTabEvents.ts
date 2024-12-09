@@ -1,16 +1,14 @@
-import { useCFStore } from '../../../zustand/useCFStore';
-import { getSlug, getCodeMap } from '../../../utils/helper';
+import { useCFStore } from '../../zustand/useCFStore';
+import { getSlug, getCodeMap } from '../helper';
 import { saveCodeForSlug, saveTestCaseForSlug } from '../services/storageService';
-import { loadCodeWithCursor } from '../utils/codeHandlers';
-import { accessRestrictionMessage } from '../utils/constants';
+import { loadCodeWithCursor } from '../codeHandlers';
+import { accessRestrictionMessage } from '../../data/constants';
 import { useTestCases } from './useTestCases';
-import { executionState } from './useCodeExecution';
 
 export const useTabEvents = () => {
     const currentSlug = useCFStore(state => state.currentSlug);
     const setCurrentSlug = useCFStore(state => state.setCurrentSlug);
     const testCases = useCFStore(state => state.testCases);
-    const setIsRunning = useCFStore(state => state.setIsRunning);
     const { loadTestCases } = useTestCases();
 
     const handleTabEvents = async (
@@ -27,8 +25,6 @@ export const useTabEvents = () => {
                 message.type === 'USER_RETURNED'
             ) {
                 const newUrl = message.url;
-                executionState.reset();
-                setIsRunning(false);
 
                 if (currentSlug) {
                     await saveCodeForSlug(currentSlug, editor, useCFStore.getState().totalSize, useCFStore.getState().setTotalSize);

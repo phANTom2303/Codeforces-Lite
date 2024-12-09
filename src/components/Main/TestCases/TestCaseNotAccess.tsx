@@ -1,5 +1,5 @@
 import { useCFStore } from "../../../zustand/useCFStore";
-import ApiSettings from "../../ApiSettings";
+import ApiSettings from "../../global/ApiSettings";
 import { Code2, ExternalLink, FileWarning } from "lucide-react";
 
 const TestCaseNotAccess: React.FC = () => {

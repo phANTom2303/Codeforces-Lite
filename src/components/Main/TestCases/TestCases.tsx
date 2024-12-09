@@ -35,6 +35,14 @@ const TestCases = () => {
         )
     };
 
+    const getInputBorderColor = (testCase: TestCase) => {
+        if (!testCase.Output) return 'border-gray-300 dark:border-gray-700';
+        return testCase.Output.trim() === testCase.ExpectedOutput.trim()
+            ? 'border-green-500 dark:border-green-500'
+            : 'border-red-500 dark:border-red-500';
+    };
+
+
     const getStatusMessage = () => {
         if (isAllTestCasesPassed()) {
             return (
@@ -123,8 +131,8 @@ const TestCases = () => {
                 TimeAndMemory: { Time: '', Memory: '' },
                 Output: ''
             };
-            
-            setTestCases({ testCases: [...testCases.testCases.map(testCase => ({ ...testCase, Output: '' })), newTestCase], ErrorMessage: '' });            setSelectedTab(testCases.testCases.length);
+
+            setTestCases({ testCases: [...testCases.testCases.map(testCase => ({ ...testCase, Output: '' })), newTestCase], ErrorMessage: '' }); setSelectedTab(testCases.testCases.length);
         }
     };
 
@@ -227,7 +235,10 @@ const TestCases = () => {
                                                     ref={inputRef}
                                                     value={testCases.testCases[selectedTab].Input}
                                                     onChange={(e) => handleInputChange(selectedTab, e.target.value)}
-                                                    className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors duration-200"
+                                                    className={`w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white transition-colors duration-200 ${testCases.testCases[selectedTab].Output
+                                                        ? getInputBorderColor(testCases.testCases[selectedTab])
+                                                        : 'border-gray-300 dark:border-gray-700'
+                                                        }`}
                                                 />
                                             </label>
                                             <button
@@ -245,7 +256,10 @@ const TestCases = () => {
                                                     ref={outputRef}
                                                     value={testCases.testCases[selectedTab].ExpectedOutput}
                                                     onChange={(e) => handleExpectedOutputChange(selectedTab, e.target.value)}
-                                                    className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 transition-colors duration-200"
+                                                    className={`w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white transition-colors duration-200 ${testCases.testCases[selectedTab].Output
+                                                            ? getInputBorderColor(testCases.testCases[selectedTab])
+                                                            : 'border-gray-300 dark:border-gray-700'
+                                                        }`}
                                                 />
                                             </label>
                                             <button

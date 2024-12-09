@@ -2,19 +2,19 @@
 import { useRef, useEffect } from 'react';
 import { useCFStore } from '../../zustand/useCFStore';
 import { getCodeMap, getSlug } from '../../utils/helper';
-import CodeEditor from '../editor/CodeEditor';
-import TopBar from '../editor/TopBar';
-import TestCases from './TestCases/TestCases';
-import { ResizablePanel } from '../ResizablePanel';
-import { useCodeExecution } from './hooks/useCodeExecution';
-import { useCodeManagement } from './hooks/useCodeManagement';
-import { useTestCases } from './hooks/useTestCases';
-import { useTabEvents } from './hooks/useTabEvents';
-import { handleSubmission } from './services/submissionService';
-import { initializeStorage } from './services/storageService';
-import { loadCodeWithCursor } from './utils/codeHandlers';
-import { accessRestrictionMessage } from './utils/constants';
-import ApiLimitAlert from '../popups/ApiLimitAlert';
+import CodeEditor from './editor/CodeEditor';
+import TopBar from './editor/TopBar';
+import TestCases from './testcases/TestCases';
+import { ResizablePanel } from '../global/ResizablePanel';
+import { useCodeExecution } from '../../utils/hooks/useCodeExecution';
+import { useCodeManagement } from '../../utils/hooks/useCodeManagement';
+import { useTestCases } from '../../utils/hooks/useTestCases';
+import { useTabEvents } from '../../utils/hooks/useTabEvents';
+import { handleSubmission } from '../../utils/services/submissionService';
+import { initializeStorage } from '../../utils/services/storageService';
+import { loadCodeWithCursor } from '../../utils/codeHandlers';
+import { accessRestrictionMessage } from '../../data/constants';
+import ApiLimitAlert from '../global/popups/ApiLimitAlert';
 
 interface MainProps {
     setShowOptions: (show: boolean) => void;
@@ -94,7 +94,7 @@ const Main: React.FC<MainProps> = ({ setShowOptions, theme, tabIndent }) => {
         const handleRunCode = async (event: KeyboardEvent) => {
             if (isRunning) return;
             if (event.ctrlKey && event.key === "'") {
-                const apiKey = localStorage.getItem('judge0ApiKey');
+                const apiKey = localStorage.getItem('judge0CEApiKey');
                 if(!apiKey) {
                     alert('Please add your API to use the run code feature.');
                     return;

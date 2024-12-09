@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
-import Options from './components/Options/page';
-import Main from './components/Main/page';
+import Options from './components/options/page';
+import Main from './components/main/page';
 
 const App = () => {
   const [showOptions, setShowOptions] = useState<boolean>(false);

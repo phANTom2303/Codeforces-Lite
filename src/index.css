@@ -37,3 +37,7 @@ body {
     transform: translateX(100%);
     opacity: 0;
 }
+
+.cursor-row-resize {
+    cursor: row-resize;
+}
