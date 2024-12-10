@@ -33,8 +33,8 @@ export const executionState = {
 const handleExecutionStatus = (result: any, testCase: any) => {
     const statusHandlers: any = {
         2: { message: 'Runtime Error', getOutput: () => result.description ? decodeURIComponent(escape(atob(result.description))) : 'In queue' },
-        3: { message: null, getOutput: () => result.stdout ? decodeURIComponent(escape(atob(result.stdout))) : 'No output' },
-        4: { message: 'Wrong Answer', getOutput: () => result.stdout ? decodeURIComponent(escape(atob(result.stdout))) : 'No output' },
+        3: { message: null, getOutput: () => result.stdout ? decodeURIComponent(escape(atob(result.stdout))) : 'No output, please check your code and print something' },
+        4: { message: 'Wrong Answer', getOutput: () => result.stdout ? decodeURIComponent(escape(atob(result.stdout))) : 'No output, please check your code and print something' },
         5: { message: 'Time Limit Exceeded', getOutput: () => 'Time Limit Exceeded' },
         6: { message: 'Compilation Error', getOutput: () => `Compilation Error: ${result.compile_output ? decodeURIComponent(escape(atob(result.compile_output))).trim() : 'Compilation Error'}` },
         7: { message: 'Memory Limit Exceeded', getOutput: () => 'Memory Limit Exceeded' },
