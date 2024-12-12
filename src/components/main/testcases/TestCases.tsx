@@ -235,7 +235,7 @@ const TestCases = () => {
                                                     ref={inputRef}
                                                     value={testCases.testCases[selectedTab].Input}
                                                     onChange={(e) => handleInputChange(selectedTab, e.target.value)}
-                                                    className={`w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white transition-colors duration-200 ${testCases.testCases[selectedTab].Output
+                                                    className={`mono-font w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white transition-colors duration-200 ${testCases.testCases[selectedTab].Output
                                                         ? getInputBorderColor(testCases.testCases[selectedTab])
                                                         : 'border-gray-300 dark:border-gray-700'
                                                         }`}
@@ -256,7 +256,7 @@ const TestCases = () => {
                                                     ref={outputRef}
                                                     value={testCases.testCases[selectedTab].ExpectedOutput}
                                                     onChange={(e) => handleExpectedOutputChange(selectedTab, e.target.value)}
-                                                    className={`w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white transition-colors duration-200 ${testCases.testCases[selectedTab].Output
+                                                    className={`mono-font w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-900 dark:text-white transition-colors duration-200 ${testCases.testCases[selectedTab].Output
                                                             ? getInputBorderColor(testCases.testCases[selectedTab])
                                                             : 'border-gray-300 dark:border-gray-700'
                                                         }`}

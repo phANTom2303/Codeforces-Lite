@@ -1,4 +1,4 @@
-import ReactCodeMirror, { EditorState, EditorView, ReactCodeMirrorRef } from "@uiw/react-codemirror";
+import ReactCodeMirror, { EditorState, ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import { indentUnit } from '@codemirror/language';
 import { githubDark, githubLight } from '@uiw/codemirror-theme-github';
 import { getLanguageExtension } from "../../../utils/helper";
@@ -8,7 +8,7 @@ import { CodeEditorProps } from "../../../types/types";
 const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
     ({ theme, language, fontSize, tabIndent, currentSlug }, editorRef) => {
         return (
-            <div className='w-full h-full'>
+            <div className='w-full h-full mono-font'>
                 <ReactCodeMirror
                     ref={editorRef}
                     theme={theme === 'light' ? githubLight : githubDark}
@@ -17,12 +17,7 @@ const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
                     extensions={[
                         getLanguageExtension(language),
                         indentUnit.of(" ".repeat(tabIndent)),
-                        EditorState.readOnly.of(currentSlug === null),
-                        EditorView.theme({
-                            "&": {
-                                fontFamily: "JetBrains Mono, Fira Code, Consolas, monospace !important"
-                            }
-                        })
+                        EditorState.readOnly.of(currentSlug === null)
                     ]}
                     style={{
                         fontSize: `${fontSize}px`,
