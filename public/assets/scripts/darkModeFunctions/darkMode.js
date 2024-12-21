@@ -2,10 +2,13 @@ const currentURL = window.location.href;
 let styleElement;
 
 const injectDarkModeCSS = () => {
-    styleElement = document.createElement("style");
-    styleElement.innerHTML = `
-            body {
+  styleElement = document.createElement("style");
+  styleElement.innerHTML = `
+            html {
                 background-color: #131313 !important;
+            }
+                
+            body {
                 filter: invert(1) hue-rotate(160deg) !important;
             }
 
@@ -103,45 +106,45 @@ const injectDarkModeCSS = () => {
                 color: #121212;
             }
         `;
-        document.addEventListener("DOMContentLoaded", () => {
-            document.head.appendChild(styleElement);
-        });
+  document.addEventListener("DOMContentLoaded", () => {
+    document.head.appendChild(styleElement);
+  });
 
-    if (document.head) {
+  if (document.head) {
+    document.head.appendChild(styleElement);
+  } else {
+    const observer = new MutationObserver(() => {
+      if (document.head) {
         document.head.appendChild(styleElement);
-    } else {
-        const observer = new MutationObserver(() => {
-            if (document.head) {
-                document.head.appendChild(styleElement);
-                observer.disconnect();
-            }
-        });
-        observer.observe(document, { childList: true, subtree: true });
-    }
-}
+        observer.disconnect();
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+  }
+};
 
 const sortToggleImgInvert = () => {
-    if (!currentURL.includes("codeforces.com/problemset")) {
-        return;
-    }
-    const anchorElements = document.querySelectorAll("a.non-decorated");
+  if (!currentURL.includes("codeforces.com/problemset")) {
+    return;
+  }
+  const anchorElements = document.querySelectorAll("a.non-decorated");
 
-    anchorElements.forEach((anchor) => {
-        const imgElements = anchor.querySelectorAll("img");
+  anchorElements.forEach((anchor) => {
+    const imgElements = anchor.querySelectorAll("img");
 
-        imgElements[1].classList.add("custom-image");
-    });
+    imgElements[1].classList.add("custom-image");
+  });
 };
 
 const removeSortToggleImgInvert = () => {
-    if (!currentURL.includes("codeforces.com/problemset")) {
-        return;
-    }
-    const anchorElements = document.querySelectorAll("a.non-decorated");
+  if (!currentURL.includes("codeforces.com/problemset")) {
+    return;
+  }
+  const anchorElements = document.querySelectorAll("a.non-decorated");
 
-    anchorElements.forEach((anchor) => {
-        const imgElements = anchor.querySelectorAll("img");
+  anchorElements.forEach((anchor) => {
+    const imgElements = anchor.querySelectorAll("img");
 
-        imgElements[1].classList.remove("custom-image");
-    });
+    imgElements[1].classList.remove("custom-image");
+  });
 };
