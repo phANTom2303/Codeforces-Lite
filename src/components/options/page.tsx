@@ -87,7 +87,7 @@ const Settings: React.FC<SettingsProps> = ({ setShowOptions, theme, setTheme, ta
                         <div className="text-left h-auto mt-2 mb-20 w-full">
                             <CodeMirror
                                 ref={editor}
-                                className="border-zinc-500 border-2"
+                                className="mono-font border-zinc-500 border-2"
                                 theme={theme === 'light' ? githubLight : githubDark}
                                 height="70vh"
                                 width="100%"
